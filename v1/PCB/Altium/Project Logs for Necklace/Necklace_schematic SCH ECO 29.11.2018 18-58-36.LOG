@@ -1,2 +1,0 @@
-Remove Pin=Sol2-0 From Net=VCC_solar
-Change Component Designator: OldDesignator=LED1 NewDesignator=LED0

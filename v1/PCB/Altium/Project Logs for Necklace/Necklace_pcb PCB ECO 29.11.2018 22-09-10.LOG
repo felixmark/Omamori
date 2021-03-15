@@ -1,5 +1,0 @@
-Added Pin To Net: NetName=GND Pin=C1-1
-Added Pin To Net: NetName=VCC Pin=C1-0
-Added Pin To Net: NetName=VCC Pin=U1-11
-Added Net: Name=VCC
-Added Room: Name=Necklace_schematic

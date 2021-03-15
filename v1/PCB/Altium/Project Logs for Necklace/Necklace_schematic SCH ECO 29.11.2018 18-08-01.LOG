@@ -1,2 +1,0 @@
-Remove Pin=Solar2-0 From Net=VCC_solar
-Change Pin Designator/Name:  Old Designator=Solar1-0 Old Name=VCC New Designator =GND New Name=1

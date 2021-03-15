@@ -1,5 +1,0 @@
-Removed Pin From Net: NetName=VCC_GND_solar Pin=Sol1-2
-Removed Pin From Net: NetName=GND Pin=Sol2-2
-Change Net Name : Old Net Name=RST New Net Name=Test
-Change Net Name : Old Net Name=Test New Net Name=RST
-Added Room: Name=Necklace_schematic

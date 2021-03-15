@@ -1,7 +1,0 @@
-Removed Pin From Net: NetName=GND Pin=Sync-GND
-Removed Pin From Net: NetName=Sync Pin=Sync-Sync
-Removed Pin From Net: NetName=Sync Pin=U2-2
-Removed Pin From Net: NetName=LED_out Pin=U2-4
-Added Pin To Net: NetName=LED_out Pin=U2-2
-Added Pin To Net: NetName=Sync Pin=U2-4
-Added Room: Name=Necklace_schematic

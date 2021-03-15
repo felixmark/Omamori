@@ -1,6 +1,0 @@
-Removed Pin From Net: NetName=NetLED1_0 Pin=LED1-0
-Removed Pin From Net: NetName=LED_out Pin=LED1-1
-Added Pin To Net: NetName=LED_out Pin=LED1-0
-Added Pin To Net: NetName=NetLED1_0 Pin=LED1-1
-Change Net Name : Old Net Name=NetLED1_0 New Net Name=NetLED1_1
-Added Room: Name=Necklace_schematic
