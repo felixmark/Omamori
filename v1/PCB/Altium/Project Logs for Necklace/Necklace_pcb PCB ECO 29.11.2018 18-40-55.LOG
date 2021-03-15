@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=LED Pin=LED-1
+Removed Pin From Net: NetName=GND Pin=LED-2
+Removed Pin From Net: NetName=VCC_GND_solar Pin=Sol1-1
+Removed Pin From Net: NetName=VCC_solar Pin=Sol1-2
+Removed Pin From Net: NetName=GND Pin=Sol2-1
+Removed Pin From Net: NetName=VCC_GND_solar Pin=Sol2-2
+Removed Member From Class: ClassName=Necklace_schematic Member=LED
+Added Component: Designator=LED1(3528_LED)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=LED Pin=LED1-1
+Added Pin To Net: NetName=GND Pin=Sol1-1
+Added Pin To Net: NetName=VCC_GND_solar Pin=Sol2-1
+Added Member To Class: ClassName=Necklace_schematic Member=Component LED1 3528_LED
+Added Room: Name=Necklace_schematic

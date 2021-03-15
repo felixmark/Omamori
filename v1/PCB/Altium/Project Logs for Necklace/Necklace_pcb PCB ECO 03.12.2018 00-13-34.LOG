@@ -1,0 +1,6 @@
+Added Component: Designator=L1(Inductivity)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=VCC_solar Pin=L1-0
+Added Pin To Net: NetName=SW Pin=L1-1
+Added Member To Class: ClassName=Necklace_schematic Member=Component L1 Inductivity
+Added Room: Name=Necklace_schematic

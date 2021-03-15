@@ -1,0 +1,6 @@
+Added Component: Designator=Sync(Synchronizer)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=NetSync_1 Pin=U2-2
+Added Net: Name=NetSync_1
+Added Member To Class: ClassName=Necklace_schematic Member=Component Sync Synchronizer
+Added Room: Name=Necklace_schematic

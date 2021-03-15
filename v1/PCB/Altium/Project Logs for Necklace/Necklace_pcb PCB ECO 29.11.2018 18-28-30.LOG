@@ -1,0 +1,7 @@
+Removed Pin From Net: NetName=NetLED1_1 Pin=U2-4
+Change Component Designator: OldDesignator=LED1 NewDesignator=LED
+Change Component Designator: OldDesignator=Solar1 NewDesignator=Sol1
+Change Component Designator: OldDesignator=Solar2 NewDesignator=Sol2
+Added Pin To Net: NetName=GND Pin=Sol1-1
+Change Net Name : Old Net Name=NetLED1_1 New Net Name=LED
+Added Room: Name=Necklace_schematic

@@ -1,0 +1,13 @@
+Added Component: Designator=Sol1(Solarzelle)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Name"; Value = "KXOB22-04X3F"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Vmpp"; Value = "1.5V"; VariantName = "[No Variations]"
+Added Component: Designator=Sol2(Solarzelle)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Name"; Value = "KXOB22-04X3F"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Vmpp"; Value = "1.5V"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=Sol1-1
+Added Pin To Net: NetName=VCC_GND_solar Pin=Sol2-1
+Added Member To Class: ClassName=Necklace_schematic Member=Component Sol1 Solar Panel
+Added Member To Class: ClassName=Necklace_schematic Member=Component Sol2 Solar Panel
+Added Room: Name=Necklace_schematic

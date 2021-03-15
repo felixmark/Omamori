@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=Test Pin=U3-1
+Removed Pin From Net: NetName=RST Pin=U3-2
+Added Pin To Net: NetName=RST Pin=U3-1
+Added Pin To Net: NetName=Test Pin=U3-2
+Added Room: Name=Necklace_schematic

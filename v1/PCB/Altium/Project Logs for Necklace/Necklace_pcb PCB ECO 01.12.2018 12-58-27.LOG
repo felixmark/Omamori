@@ -1,0 +1,5 @@
+Removed Pin From Net: NetName=VCC_solar Pin=U2-3
+Change Net Name : Old Net Name=VCC_solar New Net Name=NetC3_2
+Added Pin To Net: NetName=VCC_solar Pin=U2-3
+Added Net: Name=VCC_solar
+Added Room: Name=Necklace_schematic

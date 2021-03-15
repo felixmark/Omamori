@@ -1,0 +1,15 @@
+Added Component: Designator=U1(SOP65P490X110-12N)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Linear Technology/Analog"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LTC3105EMS#PBF"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "MSOP-12 Linear Technology"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LTC3105EMS%23PBF/Linear%20Technology/Analog%20Devices/view-part/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=U1-3
+Added Pin To Net: NetName=GND Pin=U1-6
+Added Pin To Net: NetName=GND Pin=U1-7
+Added Pin To Net: NetName=VCC_solar Pin=U1-8
+Added Member To Class: ClassName=Necklace_schematic Member=Component U1 LTC3105EMSPBF
+Added Room: Name=Necklace_schematic

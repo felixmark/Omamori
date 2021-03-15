@@ -1,0 +1,5 @@
+Added Component: Designator=C1(DMS3R3224R Supercap)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Capacity"; Value = "220mF"; VariantName = "[No Variations]"
+Added Member To Class: ClassName=Necklace_schematic Member=Component C1 DMS3R3224R Supercap
+Added Room: Name=Necklace_schematic

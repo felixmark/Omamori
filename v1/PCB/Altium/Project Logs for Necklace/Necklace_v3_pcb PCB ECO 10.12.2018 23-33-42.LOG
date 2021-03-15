@@ -1,0 +1,7 @@
+Added Component: Designator=LED1(3528_LED)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=NetLED1_1 Pin=LED1-1
+Added Member To Class: ClassName=Necklace_schematic Member=Component D2 Schutzdiode
+Added Member To Class: ClassName=Necklace_schematic Member=Component D4 Schutzdiode
+Added Member To Class: ClassName=Necklace_schematic Member=Component LED1 3528_LED
+Added Room: Name=Necklace_schematic

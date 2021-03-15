@@ -1,0 +1,4 @@
+Removed Pin From Net: NetName=Capacitive_Sensor Pin=D1-1
+Removed Pin From Net: NetName=GND Pin=D1-2
+Removed Member From Class: ClassName=Necklace_schematic Member=D1
+Added Room: Name=Necklace_schematic

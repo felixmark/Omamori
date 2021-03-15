@@ -1,0 +1,10 @@
+Removed Pin From Net: NetName=LED Pin=LED1-1
+Removed Pin From Net: NetName=GND Pin=LED1-2
+Removed Pin From Net: NetName=GND Pin=Solar1-2
+Removed Pin From Net: NetName=VCC_GND_solar Pin=Solar2-2
+Removed Pin From Net: NetName=LED Pin=U2-4
+Added Pin To Net: NetName=GND Pin=LED1-1
+Added Pin To Net: NetName=GND Pin=Solar1-1
+Added Pin To Net: NetName=LED Pin=U2-5
+Added Net: Name=VCC_solar
+Added Room: Name=Necklace_schematic

@@ -1,0 +1,28 @@
+Removed Pin From Net: NetName=GND Pin=LED1-2
+Removed Pin From Net: NetName=GND Pin=Solar1-2
+Added Component: Designator=U2(MSP430G2210)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Alternate Manufacturer"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Alternate PartNumber"; Value = "MSP430G2210ID"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "Datasheet Link"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.ti.com/lit/ds/symlink/msp430g2210.pdf"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "CompType"; Value = "IC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "2015-05-28"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MountType"; Value = "SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "D0008A"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PartNumber"; Value = "MSP430G2210IDR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "RoHS"; Value = "Y"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SymbolCreator"; Value = "Altium"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SymbolVersion"; Value = "2015-05-26"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "U/M"; Value = "EA"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=GND Pin=Solar1-1
+Added Pin To Net: NetName=LED Pin=LED1-1
+Added Pin To Net: NetName=LED Pin=U2-2
+Added Net: Name=LED
+Added Pin To Net: NetName=VCC_GND_solar Pin=Solar2-1
+Added Net: Name=VCC_GND_solar
+Added Net: Name=VCC_solar
+Added Member To Class: ClassName=Necklace_schematic Member=Component U2 MSP430G2210IDR
+Added Room: Name=Necklace_schematic
