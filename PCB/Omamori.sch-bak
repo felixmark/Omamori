@@ -1,0 +1,272 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Sensor_Optical:BPW34 D1
+U 1 1 604A06BE
+P 950 2950
+F 0 "D1" V 854 3108 50  0000 L CNN
+F 1 "BPW34" V 945 3108 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 3125 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 2950 50  0001 C CNN
+	1    950  2950
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR0101
+U 1 1 604AE59A
+P 950 5150
+F 0 "#PWR0101" H 950 4900 50  0001 C CNN
+F 1 "GND" H 955 4977 50  0000 C CNN
+F 2 "" H 950 5150 50  0001 C CNN
+F 3 "" H 950 5150 50  0001 C CNN
+	1    950  5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D8
+U 1 1 604A5472
+P 950 5050
+F 0 "D8" V 854 5208 50  0000 L CNN
+F 1 "BPW34" V 945 5208 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 5225 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 5050 50  0001 C CNN
+	1    950  5050
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D7
+U 1 1 604A5076
+P 950 4750
+F 0 "D7" V 854 4908 50  0000 L CNN
+F 1 "BPW34" V 945 4908 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 4925 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 4750 50  0001 C CNN
+	1    950  4750
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D6
+U 1 1 604A4D2B
+P 950 4450
+F 0 "D6" V 854 4608 50  0000 L CNN
+F 1 "BPW34" V 945 4608 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 4625 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 4450 50  0001 C CNN
+	1    950  4450
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D5
+U 1 1 604A43DA
+P 950 4150
+F 0 "D5" V 854 4308 50  0000 L CNN
+F 1 "BPW34" V 945 4308 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 4325 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 4150 50  0001 C CNN
+	1    950  4150
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D4
+U 1 1 604A40FE
+P 950 3850
+F 0 "D4" V 854 4008 50  0000 L CNN
+F 1 "BPW34" V 945 4008 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 4025 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 3850 50  0001 C CNN
+	1    950  3850
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D2
+U 1 1 604A3AEA
+P 950 3250
+F 0 "D2" V 854 3408 50  0000 L CNN
+F 1 "BPW34" V 945 3408 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 3425 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 3250 50  0001 C CNN
+	1    950  3250
+	0    1    1    0   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D3
+U 1 1 604A3F2C
+P 950 3550
+F 0 "D3" V 854 3708 50  0000 L CNN
+F 1 "BPW34" V 945 3708 50  0000 L CNN
+F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 950 3725 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 900 3550 50  0001 C CNN
+	1    950  3550
+	0    1    1    0   
+$EndComp
+$Comp
+L LED:WS2812B D9
+U 1 1 605000CA
+P 6950 5450
+F 0 "D9" H 7294 5496 50  0000 L CNN
+F 1 "WS2812B" H 7294 5405 50  0000 L CNN
+F 2 "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm" H 7000 5150 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 7050 5075 50  0001 L TNN
+	1    6950 5450
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0102
+U 1 1 60501EEE
+P 6950 5800
+F 0 "#PWR0102" H 6950 5550 50  0001 C CNN
+F 1 "GND" H 6955 5627 50  0000 C CNN
+F 2 "" H 6950 5800 50  0001 C CNN
+F 3 "" H 6950 5800 50  0001 C CNN
+	1    6950 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6950 5800 6950 5750
+$Comp
+L power:GND #PWR0103
+U 1 1 605032B2
+P 2600 4700
+F 0 "#PWR0103" H 2600 4450 50  0001 C CNN
+F 1 "GND" H 2605 4527 50  0000 C CNN
+F 2 "" H 2600 4700 50  0001 C CNN
+F 3 "" H 2600 4700 50  0001 C CNN
+	1    2600 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 4700 2600 4650
+Wire Wire Line
+	3000 4650 3000 4700
+$Comp
+L power:GND #PWR0104
+U 1 1 6050306E
+P 3000 4700
+F 0 "#PWR0104" H 3000 4450 50  0001 C CNN
+F 1 "GND" H 3005 4527 50  0000 C CNN
+F 2 "" H 3000 4700 50  0001 C CNN
+F 3 "" H 3000 4700 50  0001 C CNN
+	1    3000 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	950  2750 2400 2750
+Wire Wire Line
+	2400 2750 2400 3050
+Wire Wire Line
+	5750 5350 5750 5400
+$Comp
+L power:GND #PWR0105
+U 1 1 60504B03
+P 5750 5400
+F 0 "#PWR0105" H 5750 5150 50  0001 C CNN
+F 1 "GND" H 5755 5227 50  0000 C CNN
+F 2 "" H 5750 5400 50  0001 C CNN
+F 3 "" H 5750 5400 50  0001 C CNN
+	1    5750 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L MCU_Texas_MSP430:MSP430G2210ID U2
+U 1 1 60503D62
+P 5750 4750
+F 0 "U2" H 5750 5531 50  0000 C CNN
+F 1 "MSP430G2210ID" H 5750 5440 50  0000 C CNN
+F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 5150 4400 50  0001 C CIN
+F 3 "http://www.ti.com/lit/ds/symlink/msp430g2210.pdf" H 5750 4750 50  0001 C CNN
+	1    5750 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Battery_Management:BQ25504 U1
+U 1 1 6049F0BD
+P 2800 3850
+F 0 "U1" H 3444 3896 50  0000 L CNN
+F 1 "BQ25504" H 3444 3805 50  0000 L CNN
+F 2 "footprints:VQFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 2800 3850 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/bq25504.pdf" H 2500 4650 50  0001 C CNN
+	1    2800 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3400 4150 5750 4150
+Wire Wire Line
+	6550 4950 6650 4950
+Wire Wire Line
+	6650 4950 6650 5450
+Wire Wire Line
+	6550 4850 6950 4850
+Wire Wire Line
+	6950 4850 6950 5150
+Wire Wire Line
+	6550 4550 6550 3550
+Wire Wire Line
+	6550 3550 3400 3550
+$Comp
+L Device:C C1
+U 1 1 6058E241
+P 3900 2900
+F 0 "C1" H 4015 2946 50  0000 L CNN
+F 1 "C" H 4015 2855 50  0000 L CNN
+F 2 "Capacitor_THT:C_Rect_L7.2mm_W2.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 3938 2750 50  0001 C CNN
+F 3 "~" H 3900 2900 50  0001 C CNN
+	1    3900 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic_MountingPin:Conn_01x04_MountingPin J?
+U 1 1 604D8153
+P 4700 6200
+F 0 "J?" V 4576 6380 50  0000 L CNN
+F 1 "Conn_01x04_MountingPin" V 4667 6380 50  0000 L CNN
+F 2 "" H 4700 6200 50  0001 C CNN
+F 3 "~" H 4700 6200 50  0001 C CNN
+	1    4700 6200
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3200 3050 3200 2650
+Wire Wire Line
+	3200 2650 3900 2650
+Wire Wire Line
+	3900 2650 3900 2750
+$Comp
+L power:GND #PWR?
+U 1 1 604DE9F8
+P 3900 3050
+F 0 "#PWR?" H 3900 2800 50  0001 C CNN
+F 1 "GND" H 3905 2877 50  0000 C CNN
+F 2 "" H 3900 3050 50  0001 C CNN
+F 3 "" H 3900 3050 50  0001 C CNN
+	1    3900 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 604DF010
+P 5100 5800
+F 0 "#PWR?" H 5100 5550 50  0001 C CNN
+F 1 "GND" H 5105 5627 50  0000 C CNN
+F 2 "" H 5100 5800 50  0001 C CNN
+F 3 "" H 5100 5800 50  0001 C CNN
+	1    5100 5800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4800 6000 4800 5800
+Wire Wire Line
+	4800 5800 5100 5800
+$EndSCHEMATC
