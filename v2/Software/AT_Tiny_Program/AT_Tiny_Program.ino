@@ -5,19 +5,18 @@
     Date:   14.03.2021
 
     Serial Protocol:
-    <mode>
-    <values (optional)>
+    <cmd>,<values (optional)>;
     
     So for instance:
-    rgbw
-    <red byte>, <green byte>, <blue byte>, <white byte>, <brightness byte>
+    rgbw,<red byte>,<green byte>,<blue byte>,<white byte>,<brightness byte>;
 
     Available Modes are:
     0 - rgbw
 */
 
 
-// ================================================= INCLUDES =================================================
+
+// ============================================================= INCLUDES
 #include <Adafruit_NeoPixel.h>
 #include <SoftwareSerial.h>
 #include <avr/wdt.h>
@@ -26,15 +25,19 @@
 #include <avr/eeprom.h>
 
 
-// ================================================= DEFINES =================================================
-// Pins and other
+
+// ============================================================= DEFINES
+#define SERIAL_BAUD     9600
+// Pins
 #define PIN_LED         PCINT0
 #define PIN_BATT_OK     PCINT1
 #define PIN_RX          PCINT2
 #define PIN_TX          PCINT3
+#define PIN_SOLAR_CELL  PCINT4
 
 
-// ================================================= CONSTS =================================================
+
+// ============================================================= CONSTANTS
 const byte SIGMOID [] = {
     1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5,   6,
     7,   7,   8,   9,   10,  11,  12,  13,  14,  16,  17,  19,  21,  23,  25,  27,  30,  33,  36,  39,  42,  46,  50,  54,  58, 
@@ -46,12 +49,12 @@ const byte SIGMOID [] = {
 };
 
 
-// ================================================= VARIABLES =================================================
+
+// ============================================================= VARIABLES
 Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRBW + NEO_KHZ800);
 SoftwareSerial mySerial(PIN_RX, PIN_TX);
 volatile bool awake = true;
-
-// Variables
+uint16_t brightness = 0;
 uint8_t mode = 0;
 uint8_t color_r = 0;
 uint8_t color_g = 0;
@@ -67,17 +70,17 @@ uint8_t color_w_eeprom EEMEM;
 uint8_t color_brightness_eeprom EEMEM;
 
 
-// ============================================================= MAIN
-int main() {
 
-    // ============================================================= SETUP 
+// ============================================================= SETUP 
+void initialize() {
     // Setup LED
     led.begin();
     led.show();
-
-    // Setup Serial
-    mySerial.begin(9600);
-
+    
+    // Setup Pins
+    pinMode(PIN_BATT_OK, INPUT);
+    pinMode(PIN_SOLAR_CELL, INPUT);
+    
     // Setup WDT
     cli();                  // Disable Interrupts
     wdt_reset();            // Reset Watchdog Timer
@@ -86,7 +89,7 @@ int main() {
     WDTCR |= (1<<WDP3)|(0<<WDP2)|(0<<WDP1)|(0<<WDP1); // Set WDT timeout to 8 seconds
     WDTCR |= (1 << WDIE);   // Watchdog Timeout Interrupt Enable
     sei();                  // Enable Interrupts
-
+    
     // Restore variables from EEPROM
     mode = eeprom_read_byte(&mode_eeprom);
     color_r = eeprom_read_byte(&color_r_eeprom);
@@ -94,111 +97,87 @@ int main() {
     color_b = eeprom_read_byte(&color_b_eeprom);
     color_w = eeprom_read_byte(&color_w_eeprom);
     color_brightness = eeprom_read_byte(&color_brightness_eeprom);
+}
 
 
-    // ============================================================= LOOP 
-    while (true) {
-      if (awake && digitalRead(PIN_BATT_OK) == HIGH) {
-        
-          unsigned long start_time = millis();
-          while (mySerial.available() > 0 && (
-              (millis() > start_time && millis() - start_time < 500) || 
-              (millis() < start_time && millis() + (4294967295 - start_time) < 500)
-          )){
-              String new_mode = mySerial.readStringUntil('\r\n');
 
-              mySerial.print("Received mode: ");
-              mySerial.println(new_mode);
-      
-              if (new_mode == "rgbw") {
-                  mode = 0;
-                  
-                  String values = mySerial.readStringUntil('\r\n');
-                  color_r = getValue(values, ',', 0).toInt();
-                  color_g = getValue(values, ',', 1).toInt();
-                  color_b = getValue(values, ',', 2).toInt();
-                  color_w = getValue(values, ',', 3).toInt();
-                  color_brightness = getValue(values, ',', 4).toInt();
-
-                  mySerial.println("Received data.");
-                  mySerial.print("R: ");
-                  mySerial.println(color_r);
-                  mySerial.print("G: ");
-                  mySerial.println(color_g);
-                  mySerial.print("B: ");
-                  mySerial.println(color_b);
-                  mySerial.print("W: ");
-                  mySerial.println(color_w);
-                  mySerial.print("Bright: ");
-                  mySerial.println(color_brightness);
-
-                  // Update data in EEPROM if necessary
-                  updateEEPROM(mode_eeprom, mode);
-                  updateEEPROM(color_r_eeprom, color_r);
-                  updateEEPROM(color_g_eeprom, color_g);
-                  updateEEPROM(color_b_eeprom, color_b);
-                  updateEEPROM(color_w_eeprom, color_w);
-                  updateEEPROM(color_brightness_eeprom, color_brightness);
-              }
-          }
-
-
-          // ============================================================= CHECK MODE AND EXECUTE 
-
-          // MODE = RGBW
-          if (mode == 0) {
-              for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
-                  showColor(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / color_brightness);  // Sigmoid up
-              }
-              for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
-                  showColor(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / color_brightness);  // Sigmoid down
-              }
-          }
-
-          // Go to sleep afterwards
-          goToSleep();
-      } else if (awake) {
-          // ============================================================= BATTERY STATUS != OK
-          // Supercap charge is still too low -> Go to sleep and check on wakeup
-          goToSleep();
-      }
+void process() {
+    if (awake && digitalRead(PIN_BATT_OK) == HIGH) {
+        // handle serial communication
+        handle_serial();
+  
+        // Check Mode
+        if (mode == 0) {
+            brightness = analogRead(PIN_SOLAR_CELL);
+            brightness = (brightness * color_brightness) / 1024;
+          
+            // Mode = RGBW
+            for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
+                show_color(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / brightness);  // Sigmoid up
+            }
+            for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
+                show_color(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / brightness);  // Sigmoid down
+            }
+        }
+  
+        // Go to sleep afterwards
+        go_to_bed();
+    } else if (awake) {
+        // BATTERY STATUS != OK
+        // Supercap charge is still too low -> Go to sleep and check on wakeup
+        go_to_bed();
     }
-    
+}
+
+
+// ============================================================= MAIN
+int main() {
+    initialize();
+    while (true) {
+        process();
+    }
     return 0;
 }
 
 
-// ================================================= WDT ISR =================================================
+// ============================================================= WDT ISR
 ISR(WDT_vect) {
-    awake = true;   // Set awake flag for loop function
+    awake = true;
 }
 
 
-// ================================================= ENTER SLEEP =================================================
-void goToSleep() {
-    awake = false;  // Set awake flag to false for loop function
-    
+// ============================================================= ENTER SLEEP
+void go_to_bed() {
+    awake = false;
+    mySerial.end();
+
+    // Prepare for bed
     byte adcsra;
     adcsra = ADCSRA;                    // ADC Control and Status Register A sichern
     ADCSRA &= ~(1 << ADEN);             // ADC ausschalten
     MCUCR |= (1 << SM1) & ~(1 << SM0);  // Sleep-Modus = Power Down
     MCUCR |= (1 << SE);                 // Sleep Enable setzen
+
+    // Sleep
     sleep_cpu();                        // Sleeping
+
+    // Wake up
     MCUCR &= ~(1 << SE);                // Sleep Disable setzen
     ADCSRA = adcsra;                    // ADCSRA-Register laden
 }
 
 
-// ================================================= SHOW COLOR =================================================
-void showColor(byte red, byte green, byte blue, byte white, byte brightness) {
+// ============================================================= SHOW COLOR
+void show_color(byte red, byte green, byte blue, byte white, byte brightness) {
     led.setPixelColor(PIN_LED, red, green, blue, white);
     led.setBrightness(brightness);
     led.show();
 }
 
 
-// ================================================= GET VALUE FROM A STRING =================================================
-String getValue(String data, char separator, int index) {
+
+// ============================================================= GET VALUE FROM A STRING 
+String get_value(String data, char separator, int index) {
     int found = 0;
     int strIndex[] = { 0, -1 };
     int maxIndex = data.length() - 1;
@@ -213,9 +192,61 @@ String getValue(String data, char separator, int index) {
 }
 
 
-// ================================================= EETPROM FUNCTIONS =================================================
-void updateEEPROM(uint8_t &variable, uint8_t value) {
+// ============================================================= EETPROM FUNCTIONS
+void update_eeprom(uint8_t &variable, uint8_t value) {
     if (eeprom_read_byte(&variable) != value) {
         eeprom_write_byte(&variable, value);
+    }
+}
+
+
+// ============================================================= SERIAL COMMUNICATION
+void handle_serial() {
+    mySerial.begin(SERIAL_BAUD);
+    unsigned long start_time = millis();
+    while (millis() > start_time && millis() - start_time < 500 || millis() < start_time && millis() + (4294967295 - start_time) < 500) {
+
+        // Wait for incomming serial bytes
+        if (mySerial.available() == 0) {
+          delay(100);
+          continue;
+        }
+
+        // Read first line
+        String cmd = mySerial.readStringUntil(',');
+  
+        mySerial.print("Received cmd: ");
+        mySerial.println(cmd);
+  
+        if (cmd == "rgbw") {
+            mode = 0;
+            
+            String values = mySerial.readStringUntil(';');
+            color_r = get_value(values, ',', 0).toInt();
+            color_g = get_value(values, ',', 1).toInt();
+            color_b = get_value(values, ',', 2).toInt();
+            color_w = get_value(values, ',', 3).toInt();
+            color_brightness = get_value(values, ',', 4).toInt();
+  
+            mySerial.println("Received data.");
+            mySerial.print("R: ");
+            mySerial.println(color_r);
+            mySerial.print("G: ");
+            mySerial.println(color_g);
+            mySerial.print("B: ");
+            mySerial.println(color_b);
+            mySerial.print("W: ");
+            mySerial.println(color_w);
+            mySerial.print("Bright: ");
+            mySerial.println(color_brightness);
+  
+            // Update data in EEPROM if necessary
+            update_eeprom(mode_eeprom, mode);
+            update_eeprom(color_r_eeprom, color_r);
+            update_eeprom(color_g_eeprom, color_g);
+            update_eeprom(color_b_eeprom, color_b);
+            update_eeprom(color_w_eeprom, color_w);
+            update_eeprom(color_brightness_eeprom, color_brightness);
+        }
     }
 }
