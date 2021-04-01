@@ -1,4 +1,4 @@
-/*
+                                                   /*
     Omamori Program v1.0
     
     Author: Felix Mark
@@ -30,7 +30,7 @@
 #define SERIAL_BAUD     9600
 // Pins
 #define PIN_LED         PCINT0
-#define PIN_BATT_OK     PCINT1
+#define PIN_LED_ENABLE  PCINT1
 #define PIN_RX          PCINT2
 #define PIN_TX          PCINT3
 #define PIN_SOLAR_CELL  PCINT4
@@ -38,29 +38,27 @@
 
 
 // ============================================================= CONSTANTS
-const byte SIGMOID [] = {
+const uint8_t SIGMOID [] = {
     1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5,   6,
     7,   7,   8,   9,   10,  11,  12,  13,  14,  16,  17,  19,  21,  23,  25,  27,  30,  33,  36,  39,  42,  46,  50,  54,  58, 
     63,  68,  73,  79,  84,  90,  96,  102, 108, 115, 121, 128, 134, 140, 146, 153, 159, 165, 170, 176, 181, 186, 191, 196, 200,
     205, 208, 212, 216, 219, 222, 225, 227, 230, 232, 234, 236, 237, 239, 240, 242, 243, 244, 245, 246, 247, 248, 248, 249, 249, 
-    250, 250, 251, 251, 252, 252, 252, 252, 253, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255,
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 
-    255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255
+    250, 250, 251, 251, 252, 252, 252, 252, 253, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255
 };
 
 
 
 // ============================================================= VARIABLES
-Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRBW + NEO_KHZ800);
+Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRB + NEO_KHZ800);
 SoftwareSerial mySerial(PIN_RX, PIN_TX);
 volatile bool awake = true;
 uint16_t brightness = 0;
 uint8_t mode = 0;
 uint8_t color_r = 0;
-uint8_t color_g = 0;
+uint8_t color_g = 15;
 uint8_t color_b = 0;
-uint8_t color_w = 255;
-uint8_t color_brightness = 50;
+uint8_t color_w = 0;
+uint8_t color_brightness = 20;
 // EEPROM
 uint8_t mode_eeprom EEMEM;
 uint8_t color_r_eeprom EEMEM;
@@ -72,72 +70,81 @@ uint8_t color_brightness_eeprom EEMEM;
 
 
 // ============================================================= SETUP 
-void initialize() {
+void setup() {
     // Setup LED
     led.begin();
     led.show();
     
     // Setup Pins
-    pinMode(PIN_BATT_OK, INPUT);
     pinMode(PIN_SOLAR_CELL, INPUT);
+    pinMode(PIN_LED_ENABLE, OUTPUT);
     
     // Setup WDT
     cli();                  // Disable Interrupts
     wdt_reset();            // Reset Watchdog Timer
     MCUSR &= ~(1 << WDRF);  // Disable Watchdog System Reset
     WDTCR = (1 << WDCE);    // Watchdog Change Enable
-    WDTCR |= (1<<WDP3)|(0<<WDP2)|(0<<WDP1)|(0<<WDP1); // Set WDT timeout to 8 seconds
+    WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds
     WDTCR |= (1 << WDIE);   // Watchdog Timeout Interrupt Enable
     sei();                  // Enable Interrupts
     
     // Restore variables from EEPROM
     mode = eeprom_read_byte(&mode_eeprom);
-    color_r = eeprom_read_byte(&color_r_eeprom);
-    color_g = eeprom_read_byte(&color_g_eeprom);
-    color_b = eeprom_read_byte(&color_b_eeprom);
-    color_w = eeprom_read_byte(&color_w_eeprom);
-    color_brightness = eeprom_read_byte(&color_brightness_eeprom);
+    if (mode != 0xFF) {
+        color_r = eeprom_read_byte(&color_r_eeprom);
+        color_g = eeprom_read_byte(&color_g_eeprom);
+        color_b = eeprom_read_byte(&color_b_eeprom);
+        color_w = eeprom_read_byte(&color_w_eeprom);
+        color_brightness = eeprom_read_byte(&color_brightness_eeprom);
+    } else {
+        mode = 0;
+    }
 }
 
 
 
-void process() {
-    if (awake && digitalRead(PIN_BATT_OK) == HIGH) {
+void loop() {
+    if (awake) {
         // handle serial communication
         handle_serial();
   
         // Check Mode
         if (mode == 0) {
-            brightness = analogRead(PIN_SOLAR_CELL);
-            brightness = (brightness * color_brightness) / 1024;
-          
             // Mode = RGBW
+            
+            
+            //brightness = analogRead(PIN_SOLAR_CELL);
+            //brightness = (brightness * color_brightness) / 1024;
+            
+            digitalWrite(PIN_LED_ENABLE, HIGH);
             for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
-                show_color(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / brightness);  // Sigmoid up
+                show_color(
+                  (color_r * (long) SIGMOID[i]) / 255, 
+                  (color_g * (long) SIGMOID[i]) / 255, 
+                  (color_b * (long) SIGMOID[i]) / 255,
+                  (color_w * (long) SIGMOID[i]) / 255
+                );
+                delay(20);
             }
+            delay(100);
             for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
-                show_color(color_r, color_g, color_b, color_w, (byte) (((long) SIGMOID[i]) * 255) / brightness);  // Sigmoid down
+                show_color(
+                  (color_r * (long) SIGMOID[i]) / 255, 
+                  (color_g * (long) SIGMOID[i]) / 255, 
+                  (color_b * (long) SIGMOID[i]) / 255,
+                  (color_w * (long) SIGMOID[i]) / 255
+                );
+                delay(20);
             }
+            show_color(0,0,0,0);
+            digitalWrite(PIN_LED_ENABLE, LOW);
         }
   
         // Go to sleep afterwards
         go_to_bed();
-    } else if (awake) {
-        // BATTERY STATUS != OK
-        // Supercap charge is still too low -> Go to sleep and check on wakeup
-        go_to_bed();
     }
 }
 
-
-// ============================================================= MAIN
-int main() {
-    initialize();
-    while (true) {
-        process();
-    }
-    return 0;
-}
 
 
 // ============================================================= WDT ISR
@@ -146,10 +153,12 @@ ISR(WDT_vect) {
 }
 
 
+
 // ============================================================= ENTER SLEEP
 void go_to_bed() {
     awake = false;
     mySerial.end();
+    wdt_reset();
 
     // Prepare for bed
     byte adcsra;
@@ -167,10 +176,10 @@ void go_to_bed() {
 }
 
 
+
 // ============================================================= SHOW COLOR
-void show_color(byte red, byte green, byte blue, byte white, byte brightness) {
-    led.setPixelColor(PIN_LED, red, green, blue, white);
-    led.setBrightness(brightness);
+void show_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
+    led.setPixelColor(0, red, green, blue);
     led.show();
 }
 
@@ -192,12 +201,14 @@ String get_value(String data, char separator, int index) {
 }
 
 
+
 // ============================================================= EETPROM FUNCTIONS
 void update_eeprom(uint8_t &variable, uint8_t value) {
     if (eeprom_read_byte(&variable) != value) {
         eeprom_write_byte(&variable, value);
     }
 }
+
 
 
 // ============================================================= SERIAL COMMUNICATION
