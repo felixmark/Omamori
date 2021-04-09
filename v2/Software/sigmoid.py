@@ -8,15 +8,16 @@ def sigmoid(x):
 def main():
   curve = []
 
-  for i in np.linspace(-10, 0, 100):
+  for i in np.linspace(-10, 0, 125):
     curve.append(sigmoid(i))
-  for i in np.linspace(0.1, 10, 100, endpoint=True):
+  for i in np.linspace(0.1, 10, 125, endpoint=True):
     curve.append(sigmoid(i))
-  for i in reversed(curve):
-    curve.append(i)
+  #for i in reversed(curve):
+  #  curve.append(i)
 
   curve = [round(point * 255) for point in curve]
-  curve = list(filter(lambda x: x >= 0.5, curve))
+  curve = list(filter(lambda x: 255 > x >= 0.5, curve))
+  curve.append(255);
 
   # Print Array
   print("[ ", end='')

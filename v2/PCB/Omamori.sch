@@ -16,101 +16,101 @@ $EndDescr
 $Comp
 L Sensor_Optical:BPW34 D1
 U 1 1 604A06BE
-P 2700 2500
-F 0 "D1" V 2604 2658 50  0000 L CNN
-F 1 "BPW34" V 2695 2658 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 2675 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 2500 50  0001 C CNN
-	1    2700 2500
-	0    1    1    0   
+P 2500 2300
+F 0 "D1" V 2404 2458 50  0001 L CNN
+F 1 "BPW34" V 2495 2458 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 2475 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 2300 50  0001 C CNN
+	1    2500 2300
+	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR01
 U 1 1 604AE59A
-P 2700 4700
-F 0 "#PWR01" H 2700 4450 50  0001 C CNN
-F 1 "GND" H 2705 4527 50  0000 C CNN
-F 2 "" H 2700 4700 50  0001 C CNN
-F 3 "" H 2700 4700 50  0001 C CNN
-	1    2700 4700
+P 2400 5150
+F 0 "#PWR01" H 2400 4900 50  0001 C CNN
+F 1 "GND" H 2405 4977 50  0000 C CNN
+F 2 "" H 2400 5150 50  0001 C CNN
+F 3 "" H 2400 5150 50  0001 C CNN
+	1    2400 5150
 	1    0    0    -1  
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D8
 U 1 1 604A5472
-P 2700 4600
-F 0 "D8" V 2604 4758 50  0000 L CNN
-F 1 "BPW34" V 2695 4758 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 4775 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 4600 50  0001 C CNN
-	1    2700 4600
-	0    1    1    0   
+P 2500 3350
+F 0 "D8" V 2404 3508 50  0001 L CNN
+F 1 "BPW34" V 2495 3508 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3525 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3350 50  0001 C CNN
+	1    2500 3350
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D7
 U 1 1 604A5076
-P 2700 4300
-F 0 "D7" V 2604 4458 50  0000 L CNN
-F 1 "BPW34" V 2695 4458 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 4475 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 4300 50  0001 C CNN
-	1    2700 4300
-	0    1    1    0   
+P 2500 3200
+F 0 "D7" V 2404 3358 50  0001 L CNN
+F 1 "BPW34" V 2495 3358 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3375 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3200 50  0001 C CNN
+	1    2500 3200
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D6
 U 1 1 604A4D2B
-P 2700 4000
-F 0 "D6" V 2604 4158 50  0000 L CNN
-F 1 "BPW34" V 2695 4158 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 4175 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 4000 50  0001 C CNN
-	1    2700 4000
-	0    1    1    0   
+P 2500 3050
+F 0 "D6" V 2404 3208 50  0001 L CNN
+F 1 "BPW34" V 2495 3208 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3225 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3050 50  0001 C CNN
+	1    2500 3050
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D5
 U 1 1 604A43DA
-P 2700 3700
-F 0 "D5" V 2604 3858 50  0000 L CNN
-F 1 "BPW34" V 2695 3858 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 3875 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 3700 50  0001 C CNN
-	1    2700 3700
-	0    1    1    0   
+P 2500 2900
+F 0 "D5" V 2404 3058 50  0001 L CNN
+F 1 "BPW34" V 2495 3058 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3075 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 2900 50  0001 C CNN
+	1    2500 2900
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D4
 U 1 1 604A40FE
-P 2700 3400
-F 0 "D4" V 2604 3558 50  0000 L CNN
-F 1 "BPW34" V 2695 3558 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 3575 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 3400 50  0001 C CNN
-	1    2700 3400
-	0    1    1    0   
+P 2500 2750
+F 0 "D4" V 2404 2908 50  0001 L CNN
+F 1 "BPW34" V 2495 2908 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 2925 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 2750 50  0001 C CNN
+	1    2500 2750
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D2
 U 1 1 604A3AEA
-P 2700 2800
-F 0 "D2" V 2604 2958 50  0000 L CNN
-F 1 "BPW34" V 2695 2958 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 2975 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 2800 50  0001 C CNN
-	1    2700 2800
-	0    1    1    0   
+P 2500 2450
+F 0 "D2" V 2404 2608 50  0001 L CNN
+F 1 "BPW34" V 2495 2608 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 2625 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 2450 50  0001 C CNN
+	1    2500 2450
+	-1   0    0    1   
 $EndComp
 $Comp
 L Sensor_Optical:BPW34 D3
 U 1 1 604A3F2C
-P 2700 3100
-F 0 "D3" V 2604 3258 50  0000 L CNN
-F 1 "BPW34" V 2695 3258 50  0000 L CNN
-F 2 "OptoDevice:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2700 3275 50  0001 C CNN
-F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2650 3100 50  0001 C CNN
-	1    2700 3100
-	0    1    1    0   
+P 2500 2600
+F 0 "D3" V 2404 2758 50  0001 L CNN
+F 1 "BPW34" V 2495 2758 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 2775 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 2600 50  0001 C CNN
+	1    2500 2600
+	-1   0    0    1   
 $EndComp
 $Comp
 L power:GND #PWR02
@@ -174,7 +174,7 @@ U 1 1 6058E241
 P 5200 2600
 F 0 "CSuper1" H 5315 2646 50  0000 L CNN
 F 1 "C" H 5315 2555 50  0000 L CNN
-F 2 "Capacitor_THT:C_Rect_L7.2mm_W2.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2" H 5238 2450 50  0001 C CNN
+F 2 "Capacitor_THT:C_Radial_D10.0mm_H12.5mm_P5.00mm" H 5238 2450 50  0001 C CNN
 F 3 "~" H 5200 2600 50  0001 C CNN
 	1    5200 2600
 	1    0    0    -1  
@@ -244,4 +244,250 @@ Wire Wire Line
 Wire Wire Line
 	6700 2100 6700 3100
 NoConn ~ 8550 2400
+$Comp
+L Sensor_Optical:BPW34 D10
+U 1 1 606EFA36
+P 2500 3500
+F 0 "D10" V 2404 3658 50  0001 L CNN
+F 1 "BPW34" V 2495 3658 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3675 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3500 50  0001 C CNN
+	1    2500 3500
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D11
+U 1 1 606F03CC
+P 2500 3650
+F 0 "D11" V 2404 3808 50  0001 L CNN
+F 1 "BPW34" V 2495 3808 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3825 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3650 50  0001 C CNN
+	1    2500 3650
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D12
+U 1 1 606F0C8B
+P 2500 3800
+F 0 "D12" V 2404 3958 50  0001 L CNN
+F 1 "BPW34" V 2495 3958 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 3975 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3800 50  0001 C CNN
+	1    2500 3800
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D13
+U 1 1 606F13B0
+P 2500 3950
+F 0 "D13" V 2404 4108 50  0001 L CNN
+F 1 "BPW34" V 2495 4108 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4125 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 3950 50  0001 C CNN
+	1    2500 3950
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D14
+U 1 1 606F1C01
+P 2500 4100
+F 0 "D14" V 2404 4258 50  0001 L CNN
+F 1 "BPW34" V 2495 4258 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4275 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4100 50  0001 C CNN
+	1    2500 4100
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D15
+U 1 1 606F27D6
+P 2500 4250
+F 0 "D15" V 2404 4408 50  0001 L CNN
+F 1 "BPW34" V 2495 4408 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4425 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4250 50  0001 C CNN
+	1    2500 4250
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D16
+U 1 1 606F2F96
+P 2500 4400
+F 0 "D16" V 2404 4558 50  0001 L CNN
+F 1 "BPW34" V 2495 4558 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4575 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4400 50  0001 C CNN
+	1    2500 4400
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D17
+U 1 1 606F383C
+P 2500 4550
+F 0 "D17" V 2404 4708 50  0001 L CNN
+F 1 "BPW34" V 2495 4708 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4725 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4550 50  0001 C CNN
+	1    2500 4550
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D18
+U 1 1 606F3D95
+P 2500 4700
+F 0 "D18" V 2404 4858 50  0001 L CNN
+F 1 "BPW34" V 2495 4858 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 4875 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4700 50  0001 C CNN
+	1    2500 4700
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D19
+U 1 1 606F4325
+P 2500 5150
+F 0 "D19" V 2404 5308 50  0001 L CNN
+F 1 "BPW34" V 2495 5308 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 5325 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 5150 50  0001 C CNN
+	1    2500 5150
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2700 2300 2700 2450
+Connection ~ 2700 2300
+Connection ~ 2700 2450
+Wire Wire Line
+	2700 2450 2700 2600
+Connection ~ 2700 2600
+Wire Wire Line
+	2700 2600 2700 2750
+Connection ~ 2700 2750
+Wire Wire Line
+	2700 2750 2700 2900
+Connection ~ 2700 2900
+Wire Wire Line
+	2700 2900 2700 3050
+Connection ~ 2700 3050
+Wire Wire Line
+	2700 3050 2700 3200
+Connection ~ 2700 3200
+Wire Wire Line
+	2700 3200 2700 3350
+Connection ~ 2700 3350
+Wire Wire Line
+	2700 3350 2700 3500
+Connection ~ 2700 3500
+Wire Wire Line
+	2700 3500 2700 3650
+Connection ~ 2700 3650
+Wire Wire Line
+	2700 3650 2700 3800
+Connection ~ 2700 3800
+Wire Wire Line
+	2700 3800 2700 3950
+Connection ~ 2700 3950
+Wire Wire Line
+	2700 3950 2700 4100
+Connection ~ 2700 4100
+Wire Wire Line
+	2700 4100 2700 4250
+Connection ~ 2700 4250
+Wire Wire Line
+	2700 4250 2700 4400
+Connection ~ 2700 4400
+Wire Wire Line
+	2700 4400 2700 4550
+Connection ~ 2700 4550
+Wire Wire Line
+	2700 4550 2700 4700
+Connection ~ 2700 4700
+Wire Wire Line
+	2700 4700 2700 4850
+Wire Wire Line
+	2400 2300 2400 2450
+Connection ~ 2400 2450
+Wire Wire Line
+	2400 2450 2400 2600
+Connection ~ 2400 2600
+Wire Wire Line
+	2400 2600 2400 2750
+Connection ~ 2400 2750
+Wire Wire Line
+	2400 2750 2400 2900
+Connection ~ 2400 2900
+Wire Wire Line
+	2400 2900 2400 3050
+Connection ~ 2400 3050
+Wire Wire Line
+	2400 3050 2400 3200
+Connection ~ 2400 3200
+Wire Wire Line
+	2400 3200 2400 3350
+Connection ~ 2400 3350
+Wire Wire Line
+	2400 3350 2400 3500
+Connection ~ 2400 3500
+Wire Wire Line
+	2400 3500 2400 3650
+Connection ~ 2400 3650
+Wire Wire Line
+	2400 3650 2400 3800
+Connection ~ 2400 3800
+Wire Wire Line
+	2400 3800 2400 3950
+Connection ~ 2400 3950
+Wire Wire Line
+	2400 3950 2400 4100
+Connection ~ 2400 4100
+Wire Wire Line
+	2400 4100 2400 4250
+Connection ~ 2400 4250
+Wire Wire Line
+	2400 4250 2400 4400
+Connection ~ 2400 4400
+Wire Wire Line
+	2400 4400 2400 4550
+Connection ~ 2400 4550
+Wire Wire Line
+	2400 4550 2400 4700
+Connection ~ 2400 4700
+Wire Wire Line
+	2400 4700 2400 4850
+$Comp
+L Sensor_Optical:BPW34 D20
+U 1 1 60780650
+P 2500 4850
+F 0 "D20" V 2404 5008 50  0001 L CNN
+F 1 "BPW34" V 2495 5008 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 5025 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 4850 50  0001 C CNN
+	1    2500 4850
+	-1   0    0    1   
+$EndComp
+$Comp
+L Sensor_Optical:BPW34 D21
+U 1 1 60781CE2
+P 2500 5000
+F 0 "D21" V 2404 5158 50  0001 L CNN
+F 1 "BPW34" V 2495 5158 50  0001 L CNN
+F 2 "own_footprints:Osram_DIL2_4.3x4.65mm_P5.08mm" H 2500 5175 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/81521/bpw34.pdf" H 2450 5000 50  0001 C CNN
+	1    2500 5000
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	2700 4850 2700 5000
+Connection ~ 2700 4850
+Connection ~ 2700 5000
+Wire Wire Line
+	2700 5000 2700 5150
+Wire Wire Line
+	2400 4850 2400 5000
+Connection ~ 2400 4850
+Connection ~ 2400 5150
+Connection ~ 2400 5000
+Wire Wire Line
+	2400 5000 2400 5150
 $EndSCHEMATC

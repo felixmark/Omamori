@@ -1,4 +1,4 @@
-                                                   /*
+/*
     Omamori Program v1.0
     
     Author: Felix Mark
@@ -34,13 +34,15 @@
 #define PIN_RX          PCINT2
 #define PIN_TX          PCINT3
 #define PIN_SOLAR_CELL  PCINT4
+// OTHERS
+#define SLEEP_CYCLES    15
 
 
 
 // ============================================================= CONSTANTS
 const uint8_t SIGMOID [] = {
-    1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   2,   2,   2,   2,   2,   3,   3,   3,   4,   4,   4,   5,   5,   6,
-    7,   7,   8,   9,   10,  11,  12,  13,  14,  16,  17,  19,  21,  23,  25,  27,  30,  33,  36,  39,  42,  46,  50,  54,  58, 
+    1,   2,   3,   4,   5,   6,
+    7,   8,   9,   10,  11,  12,  13,  14,  16,  17,  19,  21,  23,  25,  27,  30,  33,  36,  39,  42,  46,  50,  54,  58, 
     63,  68,  73,  79,  84,  90,  96,  102, 108, 115, 121, 128, 134, 140, 146, 153, 159, 165, 170, 176, 181, 186, 191, 196, 200,
     205, 208, 212, 216, 219, 222, 225, 227, 230, 232, 234, 236, 237, 239, 240, 242, 243, 244, 245, 246, 247, 248, 248, 249, 249, 
     250, 250, 251, 251, 252, 252, 252, 252, 253, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 254, 255
@@ -49,15 +51,17 @@ const uint8_t SIGMOID [] = {
 
 
 // ============================================================= VARIABLES
-Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRBW + NEO_KHZ800);
 SoftwareSerial mySerial(PIN_RX, PIN_TX);
 volatile bool awake = true;
+uint8_t sleep_cycle_counter = 0;
+
 uint16_t brightness = 0;
 uint8_t mode = 0;
-uint8_t color_r = 0;
-uint8_t color_g = 15;
-uint8_t color_b = 0;
-uint8_t color_w = 0;
+uint8_t color_r = 50;
+uint8_t color_g = 0;
+uint8_t color_b = 10;
+uint8_t color_w = 10;
 uint8_t color_brightness = 20;
 // EEPROM
 uint8_t mode_eeprom EEMEM;
@@ -104,45 +108,56 @@ void setup() {
 
 
 void loop() {
-    if (awake) {
+    if (awake && sleep_cycle_counter == 0) {
+        sleep_cycle_counter = SLEEP_CYCLES;
+        
         // handle serial communication
         handle_serial();
   
         // Check Mode
         if (mode == 0) {
             // Mode = RGBW
-            
-            
+
             //brightness = analogRead(PIN_SOLAR_CELL);
             //brightness = (brightness * color_brightness) / 1024;
+
+            uint8_t r_offset = color_r > 0 ? 1 : 0;
+            uint8_t g_offset = color_g > 0 ? 1 : 0;
+            uint8_t b_offset = color_b > 0 ? 1 : 0;
+            uint8_t w_offset = color_w > 0 ? 1 : 0;
             
             digitalWrite(PIN_LED_ENABLE, HIGH);
             for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
+                
                 show_color(
-                  (color_r * (long) SIGMOID[i]) / 255, 
-                  (color_g * (long) SIGMOID[i]) / 255, 
-                  (color_b * (long) SIGMOID[i]) / 255,
-                  (color_w * (long) SIGMOID[i]) / 255
+                    r_offset + (color_r * (long) SIGMOID[i]) / 254, 
+                    g_offset + (color_g * (long) SIGMOID[i]) / 254, 
+                    b_offset + (color_b * (long) SIGMOID[i]) / 254,
+                    w_offset + (color_w * (long) SIGMOID[i]) / 254
                 );
-                delay(20);
+                delay(15);
             }
-            delay(100);
             for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
                 show_color(
-                  (color_r * (long) SIGMOID[i]) / 255, 
-                  (color_g * (long) SIGMOID[i]) / 255, 
-                  (color_b * (long) SIGMOID[i]) / 255,
-                  (color_w * (long) SIGMOID[i]) / 255
+                  r_offset + (color_r * (long) SIGMOID[i]) / 254, 
+                  g_offset + (color_g * (long) SIGMOID[i]) / 254, 
+                  b_offset + (color_b * (long) SIGMOID[i]) / 254,
+                  w_offset + (color_w * (long) SIGMOID[i]) / 254
                 );
-                delay(20);
+                delay(15);
             }
             show_color(0,0,0,0);
             digitalWrite(PIN_LED_ENABLE, LOW);
         }
-  
-        // Go to sleep afterwards
-        go_to_bed();
+    } else {
+        digitalWrite(PIN_LED_ENABLE, HIGH);
+        show_color(color_r, color_g, color_b, color_w);
+        delay(1);
+        show_color(0,0,0,0);
+        digitalWrite(PIN_LED_ENABLE, LOW);
     }
+    
+    go_to_bed();
 }
 
 
@@ -156,9 +171,10 @@ ISR(WDT_vect) {
 
 // ============================================================= ENTER SLEEP
 void go_to_bed() {
+    wdt_reset();
+    sleep_cycle_counter -= 1;
     awake = false;
     mySerial.end();
-    wdt_reset();
 
     // Prepare for bed
     byte adcsra;
@@ -179,7 +195,7 @@ void go_to_bed() {
 
 // ============================================================= SHOW COLOR
 void show_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
-    led.setPixelColor(0, red, green, blue);
+    led.setPixelColor(0, red, green, blue, white);
     led.show();
 }
 
