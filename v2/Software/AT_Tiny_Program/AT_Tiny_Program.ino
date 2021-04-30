@@ -8,7 +8,7 @@
     <cmd>,<values (optional)>;
     
     So for instance:
-    rgbw,<red byte>,<green byte>,<blue byte>,<white byte>,<brightness byte>;
+    rgbw,<red byte>,<green byte>,<blue byte>,<white byte>,;
 
     Available Modes are:
     0 - rgbw
@@ -27,15 +27,16 @@
 
 
 // ============================================================= DEFINES
-#define SERIAL_BAUD     9600
+#define SERIAL_BAUD         9600
+#define MINIMUM_BRIGHTNESS  10
+
 // Pins
-#define PIN_LED         PCINT0
-#define PIN_LED_ENABLE  PCINT1
-#define PIN_RX          PCINT2
-#define PIN_TX          PCINT3
-#define PIN_SOLAR_CELL  PCINT4
-// OTHERS
-#define SLEEP_CYCLES    15
+#define PIN_LED             PCINT0
+#define PIN_LED_ENABLE      PCINT1
+#define PIN_SERIAL_ENABLE   PCINT2
+#define PIN_SOLAR_CELL      PCINT3
+#define PIN_RX              PCINT4
+#define PIN_TX              PCINT5
 
 
 
@@ -52,24 +53,25 @@ const uint8_t SIGMOID [] = {
 
 // ============================================================= VARIABLES
 Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRBW + NEO_KHZ800);
-SoftwareSerial mySerial(PIN_RX, PIN_TX);
-volatile bool awake = true;
-uint8_t sleep_cycle_counter = 0;
+SoftwareSerial mySerial(PIN_RX, PIN_RX);
 
-uint16_t brightness = 0;
+volatile bool awake = true;
+uint8_t current_sleep_cycles = 4; // Between 1 and 10 cycles = 8 to 80 seconds sleep
+uint8_t sleep_cycle_counter = 0;
+uint8_t brightness = 0;
+
 uint8_t mode = 0;
-uint8_t color_r = 50;
+uint8_t color_r = 100;
 uint8_t color_g = 0;
-uint8_t color_b = 10;
-uint8_t color_w = 10;
-uint8_t color_brightness = 20;
+uint8_t color_b = 15;
+uint8_t color_w = 20;
+
 // EEPROM
 uint8_t mode_eeprom EEMEM;
 uint8_t color_r_eeprom EEMEM;
 uint8_t color_g_eeprom EEMEM;
 uint8_t color_b_eeprom EEMEM;
 uint8_t color_w_eeprom EEMEM;
-uint8_t color_brightness_eeprom EEMEM;
 
 
 
@@ -82,6 +84,7 @@ void setup() {
     // Setup Pins
     pinMode(PIN_SOLAR_CELL, INPUT);
     pinMode(PIN_LED_ENABLE, OUTPUT);
+    pinMode(PIN_SERIAL_ENABLE, INPUT);
     
     // Setup WDT
     cli();                  // Disable Interrupts
@@ -92,14 +95,13 @@ void setup() {
     WDTCR |= (1 << WDIE);   // Watchdog Timeout Interrupt Enable
     sei();                  // Enable Interrupts
     
-    // Restore variables from EEPROM
+    // Restore variables from EEPROM if they are set
     mode = eeprom_read_byte(&mode_eeprom);
     if (mode != 0xFF) {
         color_r = eeprom_read_byte(&color_r_eeprom);
         color_g = eeprom_read_byte(&color_g_eeprom);
         color_b = eeprom_read_byte(&color_b_eeprom);
         color_w = eeprom_read_byte(&color_w_eeprom);
-        color_brightness = eeprom_read_byte(&color_brightness_eeprom);
     } else {
         mode = 0;
     }
@@ -108,73 +110,136 @@ void setup() {
 
 
 void loop() {
-    if (awake && sleep_cycle_counter == 0) {
-        sleep_cycle_counter = SLEEP_CYCLES;
-        
-        // handle serial communication
+    if (awake) {
+
+        // Measure brightness on Solarcells
+        brightness = (analogRead(PIN_SOLAR_CELL) >> 2) / 2;
+
+        // Check if Mode = Programming
         handle_serial();
-  
-        // Check Mode
-        if (mode == 0) {
-            // Mode = RGBW
-
-            //brightness = analogRead(PIN_SOLAR_CELL);
-            //brightness = (brightness * color_brightness) / 1024;
-
-            uint8_t r_offset = color_r > 0 ? 1 : 0;
-            uint8_t g_offset = color_g > 0 ? 1 : 0;
-            uint8_t b_offset = color_b > 0 ? 1 : 0;
-            uint8_t w_offset = color_w > 0 ? 1 : 0;
+        
+        if (sleep_cycle_counter == 0) {
+            // After some sleep cycles
             
-            digitalWrite(PIN_LED_ENABLE, HIGH);
-            for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
+            // Check Mode
+            if (mode == 0) {
+                // Mode = RGBW
+    
+                // Read Solar Cell Voltage
+    
+                uint8_t r_offset = color_r > 0 ? 1 : 0;
+                uint8_t g_offset = color_g > 0 ? 1 : 0;
+                uint8_t b_offset = color_b > 0 ? 1 : 0;
+                uint8_t w_offset = color_w > 0 ? 1 : 0;
                 
-                show_color(
-                    r_offset + (color_r * (long) SIGMOID[i]) / 254, 
-                    g_offset + (color_g * (long) SIGMOID[i]) / 254, 
-                    b_offset + (color_b * (long) SIGMOID[i]) / 254,
-                    w_offset + (color_w * (long) SIGMOID[i]) / 254
-                );
-                delay(15);
+                digitalWrite(PIN_LED_ENABLE, HIGH);
+                delay(5);
+                for (int i = 0; i < sizeof SIGMOID / sizeof SIGMOID[0]; ++i) {
+                    show_color(
+                        r_offset + (((color_r * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        g_offset + (((color_g * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        b_offset + (((color_b * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        w_offset + (((color_w * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254
+                    );
+                    delay(15);
+                }
+                for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
+                    show_color(
+                        r_offset + (((color_r * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        g_offset + (((color_g * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        b_offset + (((color_b * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                        w_offset + (((color_w * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254
+                    );
+                    delay(15);
+                }
+                show_color(0,0,0,0);
+                digitalWrite(PIN_LED_ENABLE, LOW);
             }
-            for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
-                show_color(
-                  r_offset + (color_r * (long) SIGMOID[i]) / 254, 
-                  g_offset + (color_g * (long) SIGMOID[i]) / 254, 
-                  b_offset + (color_b * (long) SIGMOID[i]) / 254,
-                  w_offset + (color_w * (long) SIGMOID[i]) / 254
-                );
-                delay(15);
-            }
+          
+            // Determine next sleep duration and set sleep_cycle_counter
+            current_sleep_cycles = map(brightness, 0, 127, 15, 1);
+            sleep_cycle_counter = current_sleep_cycles;
+            
+        } else {
+            // Short blink every 8 seconds
+            digitalWrite(PIN_LED_ENABLE, HIGH);
+            delay(5);
+            show_color(0, 0, 0, 1 + brightness / 2);
+            delay(5);
             show_color(0,0,0,0);
             digitalWrite(PIN_LED_ENABLE, LOW);
-        }
-    } else {
-        digitalWrite(PIN_LED_ENABLE, HIGH);
-        show_color(color_r, color_g, color_b, color_w);
-        delay(1);
-        show_color(0,0,0,0);
-        digitalWrite(PIN_LED_ENABLE, LOW);
+        }   
     }
-    
+
     go_to_bed();
 }
 
 
 
-// ============================================================= WDT ISR
+
+// ============================================================= SERIAL COMMUNICATION
+void handle_serial() {
+    if (digitalRead(PIN_SERIAL_ENABLE) == HIGH) {
+        mySerial.begin(SERIAL_BAUD);
+        while (digitalRead(PIN_SERIAL_ENABLE) == HIGH) {
+    
+            // Wait for incomming serial bytes
+            if (mySerial.available() == 0) {
+                delay(100);
+                continue;
+            }
+    
+            // Read first line
+            String cmd = mySerial.readStringUntil(',');
+      
+            mySerial.print("Received cmd: ");
+            mySerial.println(cmd);
+      
+            if (cmd == "rgbw") {
+                mode = 0;
+                
+                String values = mySerial.readStringUntil(';');
+                color_r = get_value(values, ',', 0).toInt();
+                color_g = get_value(values, ',', 1).toInt();
+                color_b = get_value(values, ',', 2).toInt();
+                color_w = get_value(values, ',', 3).toInt();
+      
+                mySerial.println("Received data.");
+                mySerial.print("R: ");
+                mySerial.println(color_r);
+                mySerial.print("G: ");
+                mySerial.println(color_g);
+                mySerial.print("B: ");
+                mySerial.println(color_b);
+                mySerial.print("W: ");
+                mySerial.println(color_w);
+      
+                // Update data in EEPROM if necessary
+                update_eeprom(mode_eeprom, mode);
+                update_eeprom(color_r_eeprom, color_r);
+                update_eeprom(color_g_eeprom, color_g);
+                update_eeprom(color_b_eeprom, color_b);
+                update_eeprom(color_w_eeprom, color_w);
+            }
+    
+            delay(100);
+        }
+        mySerial.end();
+    }
+}
+
+// ============================================================= FINISHED FUNCTIONS
+
+// WDT ISR
 ISR(WDT_vect) {
     awake = true;
 }
 
-
-
-// ============================================================= ENTER SLEEP
+// ENTER SLEEP
 void go_to_bed() {
     wdt_reset();
     sleep_cycle_counter -= 1;
     awake = false;
-    mySerial.end();
 
     // Prepare for bed
     byte adcsra;
@@ -191,17 +256,13 @@ void go_to_bed() {
     ADCSRA = adcsra;                    // ADCSRA-Register laden
 }
 
-
-
-// ============================================================= SHOW COLOR
+// SHOW COLOR
 void show_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
     led.setPixelColor(0, red, green, blue, white);
     led.show();
 }
 
-
-
-// ============================================================= GET VALUE FROM A STRING 
+// GET VALUE FROM A STRING 
 String get_value(String data, char separator, int index) {
     int found = 0;
     int strIndex[] = { 0, -1 };
@@ -216,64 +277,9 @@ String get_value(String data, char separator, int index) {
     return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
 }
 
-
-
-// ============================================================= EETPROM FUNCTIONS
+// EETPROM FUNCTIONS
 void update_eeprom(uint8_t &variable, uint8_t value) {
     if (eeprom_read_byte(&variable) != value) {
         eeprom_write_byte(&variable, value);
-    }
-}
-
-
-
-// ============================================================= SERIAL COMMUNICATION
-void handle_serial() {
-    mySerial.begin(SERIAL_BAUD);
-    unsigned long start_time = millis();
-    while (millis() > start_time && millis() - start_time < 500 || millis() < start_time && millis() + (4294967295 - start_time) < 500) {
-
-        // Wait for incomming serial bytes
-        if (mySerial.available() == 0) {
-          delay(100);
-          continue;
-        }
-
-        // Read first line
-        String cmd = mySerial.readStringUntil(',');
-  
-        mySerial.print("Received cmd: ");
-        mySerial.println(cmd);
-  
-        if (cmd == "rgbw") {
-            mode = 0;
-            
-            String values = mySerial.readStringUntil(';');
-            color_r = get_value(values, ',', 0).toInt();
-            color_g = get_value(values, ',', 1).toInt();
-            color_b = get_value(values, ',', 2).toInt();
-            color_w = get_value(values, ',', 3).toInt();
-            color_brightness = get_value(values, ',', 4).toInt();
-  
-            mySerial.println("Received data.");
-            mySerial.print("R: ");
-            mySerial.println(color_r);
-            mySerial.print("G: ");
-            mySerial.println(color_g);
-            mySerial.print("B: ");
-            mySerial.println(color_b);
-            mySerial.print("W: ");
-            mySerial.println(color_w);
-            mySerial.print("Bright: ");
-            mySerial.println(color_brightness);
-  
-            // Update data in EEPROM if necessary
-            update_eeprom(mode_eeprom, mode);
-            update_eeprom(color_r_eeprom, color_r);
-            update_eeprom(color_g_eeprom, color_g);
-            update_eeprom(color_b_eeprom, color_b);
-            update_eeprom(color_w_eeprom, color_w);
-            update_eeprom(color_brightness_eeprom, color_brightness);
-        }
     }
 }
