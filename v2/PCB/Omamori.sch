@@ -105,7 +105,7 @@ L MCU_Microchip_ATtiny:ATtiny13A-SSU U3
 U 1 1 604F4615
 P 8300 3600
 F 0 "U3" V 7725 3600 50  0000 C CNN
-F 1 "ATtiny13A-SSU" V 7634 3600 50  0000 C CNN
+F 1 "ATtiny85" V 7634 3600 50  0000 C CNN
 F 2 "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm" H 8300 3600 50  0001 C CIN
 F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/doc8126.pdf" H 8300 3600 50  0001 C CNN
 	1    8300 3600
@@ -208,7 +208,7 @@ F 3 "" H 2550 3650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L own_symbols:KXOB25-05X3F Sol_1
+L Omamori-rescue:KXOB25-05X3F-own_symbols Sol_1
 U 1 1 609C9A98
 P 2550 2500
 F 0 "Sol_1" V 2696 2422 50  0000 R CNN
@@ -219,7 +219,7 @@ F 3 "" H 2350 2350 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L own_symbols:KXOB25-05X3F Sol_2
+L Omamori-rescue:KXOB25-05X3F-own_symbols Sol_2
 U 1 1 609C8E61
 P 2550 3300
 F 0 "Sol_2" V 2696 3222 50  0000 R CNN
@@ -251,31 +251,6 @@ F 3 "" H 3800 4400 50  0001 C CNN
 	1    3800 4400
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:C C_filter1
-U 1 1 609F4440
-P 5800 2600
-F 0 "C_filter1" H 5915 2646 50  0000 L CNN
-F 1 "0.1uF" H 5915 2555 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5838 2450 50  0001 C CNN
-F 3 "~" H 5800 2600 50  0001 C CNN
-	1    5800 2600
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR014
-U 1 1 609F4F40
-P 5800 2750
-F 0 "#PWR014" H 5800 2500 50  0001 C CNN
-F 1 "GND" H 5805 2577 50  0000 C CNN
-F 2 "" H 5800 2750 50  0001 C CNN
-F 3 "" H 5800 2750 50  0001 C CNN
-	1    5800 2750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5800 2450 5200 2450
-Connection ~ 5200 2450
 $Comp
 L power:GND #PWR08
 U 1 1 609F652D
@@ -611,8 +586,6 @@ $EndComp
 Wire Wire Line
 	6950 1150 6950 3600
 Wire Wire Line
-	4150 1750 4150 2050
-Wire Wire Line
 	5650 3700 5950 3700
 $Comp
 L power:GND #PWR013
@@ -626,41 +599,14 @@ F 3 "" H 5650 4000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4150 1750 7250 1750
-Wire Wire Line
-	8000 1750 8000 3000
-Wire Wire Line
 	8000 1150 6950 1150
 NoConn ~ 8500 3000
-$Comp
-L Device:R R1
-U 1 1 60AE19CB
-P 7400 1750
-F 0 "R1" V 7193 1750 50  0000 C CNN
-F 1 "1M" V 7284 1750 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 7330 1750 50  0001 C CNN
-F 3 "~" H 7400 1750 50  0001 C CNN
-	1    7400 1750
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	7550 1750 8000 1750
 Wire Wire Line
 	8100 1150 8100 2350
 Wire Wire Line
 	8100 2350 8200 2350
 Wire Wire Line
 	8200 2350 8200 3000
-Wire Wire Line
-	8100 3000 8100 2500
-Wire Wire Line
-	8100 2500 8300 2500
-Wire Wire Line
-	8300 2500 8300 2200
-Wire Wire Line
-	8300 2200 8200 2200
-Wire Wire Line
-	8200 2200 8200 1150
 Wire Wire Line
 	6950 3600 7700 3600
 Connection ~ 5650 3700
@@ -676,5 +622,81 @@ F 3 "~" H 5650 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	5150 3700 5650 3700
+	5150 3700 5300 3700
+Wire Wire Line
+	8200 1150 8200 2300
+Wire Wire Line
+	8200 2300 8300 2300
+Wire Wire Line
+	8300 2300 8300 2650
+Wire Wire Line
+	8300 2650 8100 2650
+Wire Wire Line
+	8100 2650 8100 3000
+$Comp
+L pspice:DIODE D2
+U 1 1 60AAB4F1
+P 6100 1800
+F 0 "D2" H 6100 1535 50  0000 C CNN
+F 1 "DIODE" H 6100 1626 50  0000 C CNN
+F 2 "Diode_SMD:D_SOD-323_HandSoldering" H 6100 1800 50  0001 C CNN
+F 3 "~" H 6100 1800 50  0001 C CNN
+	1    6100 1800
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8000 1800 6300 1800
+Text Label 2850 2050 0    50   ~ 0
+Vsolar
+Wire Wire Line
+	5900 1800 3300 1800
+Wire Wire Line
+	3300 1800 3300 2050
+Wire Wire Line
+	8000 1800 8000 3000
+Text Label 7250 3600 0    50   ~ 0
+Vcc_ATTiny
+Text Label 5350 3100 0    50   ~ 0
+Vbat_ok
+Text Label 5300 3700 0    50   ~ 0
+Vstor
+Text Label 3450 3200 0    50   ~ 0
+Vr_div
+$Comp
+L power:GND #PWR014
+U 1 1 609F4F40
+P 5300 4000
+F 0 "#PWR014" H 5300 3750 50  0001 C CNN
+F 1 "GND" H 5305 3827 50  0000 C CNN
+F 2 "" H 5300 4000 50  0001 C CNN
+F 3 "" H 5300 4000 50  0001 C CNN
+	1    5300 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C_filter1
+U 1 1 609F4440
+P 5300 3850
+F 0 "C_filter1" H 5415 3896 50  0000 L CNN
+F 1 "0.1uF" H 5415 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5338 3700 50  0001 C CNN
+F 3 "~" H 5300 3850 50  0001 C CNN
+	1    5300 3850
+	1    0    0    -1  
+$EndComp
+Connection ~ 5300 3700
+Wire Wire Line
+	5300 3700 5650 3700
+Text Label 7300 1800 0    50   ~ 0
+Vsolar_measure
+Text Label 8200 1550 0    50   ~ 0
+Tx
+Text Label 8100 1550 0    50   ~ 0
+Rx
+Text Label 9450 2800 0    50   ~ 0
+Vcc_LED
+Text Label 8550 2900 0    50   ~ 0
+Data_LED
+Text Label 9150 3100 0    50   ~ 0
+Din_LED
 $EndSCHEMATC
