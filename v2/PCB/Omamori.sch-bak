@@ -262,17 +262,6 @@ F 3 "" H 3950 3800 50  0001 C CNN
 	1    3950 3800
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:L L_bst1
-U 1 1 609CFCA3
-P 4400 2050
-F 0 "L_bst1" V 4590 2050 50  0000 C CNN
-F 1 "22uH" V 4499 2050 50  0000 C CNN
-F 2 "Inductor_SMD:L_Wuerth_MAPI-3015" H 4400 2050 50  0001 C CNN
-F 3 "~" H 4400 2050 50  0001 C CNN
-	1    4400 2050
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	4150 2050 4250 2050
 Wire Wire Line
@@ -469,17 +458,6 @@ $EndComp
 Wire Wire Line
 	6750 3800 6750 3600
 Connection ~ 6750 3600
-$Comp
-L Device:L L_boost1
-U 1 1 60A0F419
-P 5800 3600
-F 0 "L_boost1" V 5990 3600 50  0000 C CNN
-F 1 "4.7uH" V 5899 3600 50  0000 C CNN
-F 2 "Inductor_SMD:L_Wuerth_MAPI-3015" H 5800 3600 50  0001 C CNN
-F 3 "~" H 5800 3600 50  0001 C CNN
-	1    5800 3600
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	5650 3600 5650 3700
 $Comp
@@ -697,4 +675,28 @@ Text Label 9450 2800 0    50   ~ 0
 Vcc_LED
 Text Label 8550 2900 0    50   ~ 0
 Data_LED
+Text Label 9150 3100 0    50   ~ 0
+Din_LED
+$Comp
+L Device:L L_boost1
+U 1 1 60A0F419
+P 5800 3600
+F 0 "L_boost1" V 5990 3600 50  0000 C CNN
+F 1 "4.7uH" V 5899 3600 50  0000 C CNN
+F 2 "Inductor_SMD:L_Wuerth_MAPI-3015" H 5800 3600 50  0001 C CNN
+F 3 "~" H 5800 3600 50  0001 C CNN
+	1    5800 3600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:L L_bst1
+U 1 1 609CFCA3
+P 4400 2050
+F 0 "L_bst1" V 4590 2050 50  0000 C CNN
+F 1 "22uH" V 4499 2050 50  0000 C CNN
+F 2 "Inductor_SMD:L_Wuerth_MAPI-3015" H 4400 2050 50  0001 C CNN
+F 3 "~" H 4400 2050 50  0001 C CNN
+	1    4400 2050
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC
