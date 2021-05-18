@@ -224,7 +224,7 @@
   )
 
   (module own_footprints:KXOB25-05X3F (layer F.Cu) (tedit 60A2DACD) (tstamp 60A18733)
-    (at 17.25 30 270)
+    (at 16.75 30 270)
     (path /609C8E61)
     (fp_text reference Sol_2 (at 0 0.5 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -244,7 +244,7 @@
   )
 
   (module own_footprints:KXOB25-05X3F (layer F.Cu) (tedit 60A2DACD) (tstamp 609F0033)
-    (at 32.75 30 270)
+    (at 33.25 30 270)
     (path /609C9A98)
     (fp_text reference Sol_1 (at 0 0.5 90) (layer F.SilkS) hide
       (effects (font (size 1 1) (thickness 0.15)))
@@ -1295,9 +1295,9 @@
   (segment (start 29.3 18.75) (end 29.3 17.689998) (width 0.5) (layer B.Cu) (net 14))
   (segment (start 17.25 16.5) (end 16.75 17) (width 0.5) (layer B.Cu) (net 14))
   (segment (start 28.110002 16.5) (end 17.25 16.5) (width 0.5) (layer B.Cu) (net 14))
-  (segment (start 32.75 19.5) (end 32.75 21) (width 1) (layer F.Cu) (net 14))
-  (segment (start 33.5 21.75) (end 36.25 21.75) (width 1) (layer F.Cu) (net 14))
-  (segment (start 32.75 21) (end 33.5 21.75) (width 1) (layer F.Cu) (net 14))
+  (segment (start 32.75 19.5) (end 35.75 19.5) (width 1) (layer F.Cu) (net 14))
+  (segment (start 35.75 21.25) (end 36.25 21.75) (width 1) (layer F.Cu) (net 14))
+  (segment (start 35.75 19.5) (end 35.75 21.25) (width 1) (layer F.Cu) (net 14))
   (segment (start 17.35 19.923002) (end 17.35 18.9) (width 0.25) (layer B.Cu) (net 15))
   (segment (start 18 20.573002) (end 17.35 19.923002) (width 0.25) (layer B.Cu) (net 15))
   (segment (start 18 21.1) (end 18 20.573002) (width 0.25) (layer B.Cu) (net 15))
