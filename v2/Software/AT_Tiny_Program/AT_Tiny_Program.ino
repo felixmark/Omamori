@@ -27,8 +27,10 @@
 
 
 // ============================================================= DEFINES
-#define SERIAL_BAUD         9600
-#define MINIMUM_BRIGHTNESS  10
+#define SERIAL_BAUD               9600
+#define MINIMUM_BRIGHTNESS        10
+#define SIGMOID_POINTS_TIME_DELAY 10  // ms
+#define BLINK_ON_TIME             10  // ms
 
 // Pins
 #define PIN_LED             PCINT0
@@ -56,7 +58,7 @@ Adafruit_NeoPixel led = Adafruit_NeoPixel(1, PIN_LED, NEO_GRBW + NEO_KHZ800);
 SoftwareSerial mySerial(PIN_RX, PIN_RX);
 
 volatile bool awake = true;
-uint8_t current_sleep_cycles = 4; // Between 1 and 10 cycles = 8 to 80 seconds sleep
+uint8_t current_sleep_cycles = 1; // Between 1 and 10 cycles = 8 to 80 seconds sleep
 uint8_t sleep_cycle_counter = 0;
 uint8_t brightness = 0;
 
@@ -92,6 +94,7 @@ void setup() {
     MCUSR &= ~(1 << WDRF);  // Disable Watchdog System Reset
     WDTCR = (1 << WDCE);    // Watchdog Change Enable
     WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds
+    // WDTCR = (1 << WDP3) | (0 << WDP2) | (0 << WDP1) | (0 << WDP0); // Set WDT timeout to 4 seconds
     WDTCR |= (1 << WDIE);   // Watchdog Timeout Interrupt Enable
     sei();                  // Enable Interrupts
     
@@ -141,7 +144,7 @@ void loop() {
                         b_offset + (((color_b * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
                         w_offset + (((color_w * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254
                     );
-                    delay(15);
+                    delay(SIGMOID_POINTS_TIME_DELAY);
                 }
                 for (int i = (sizeof SIGMOID / sizeof SIGMOID[0]) - 1; i >= 0; --i) {
                     show_color(
@@ -150,10 +153,10 @@ void loop() {
                         b_offset + (((color_b * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254,
                         w_offset + (((color_w * (long) SIGMOID[i]) / 255) * (MINIMUM_BRIGHTNESS+brightness)) / 254
                     );
-                    delay(15);
+                    delay(SIGMOID_POINTS_TIME_DELAY);
                 }
                 show_color(0,0,0,0);
-                digitalWrite(PIN_LED_ENABLE, LOW);
+                digitalWrite(5, LOW);
             }
           
             // Determine next sleep duration and set sleep_cycle_counter
@@ -161,11 +164,20 @@ void loop() {
             sleep_cycle_counter = current_sleep_cycles;
             
         } else {
-            // Short blink every 8 seconds
+            // Short blink every 4 seconds
             digitalWrite(PIN_LED_ENABLE, HIGH);
             delay(5);
-            show_color(0, 0, 0, 1 + brightness / 2);
-            delay(5);
+            uint8_t r_offset = color_r > 0 ? 1 : 0;
+            uint8_t g_offset = color_g > 0 ? 1 : 0;
+            uint8_t b_offset = color_b > 0 ? 1 : 0;
+            uint8_t w_offset = color_w > 0 ? 1 : 0;
+            show_color(
+                r_offset + (color_r * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                g_offset + (color_g * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                b_offset + (color_b * (MINIMUM_BRIGHTNESS+brightness)) / 254,
+                w_offset + (color_w * (MINIMUM_BRIGHTNESS+brightness)) / 254
+            );
+            delay(BLINK_ON_TIME);
             show_color(0,0,0,0);
             digitalWrite(PIN_LED_ENABLE, LOW);
         }   
