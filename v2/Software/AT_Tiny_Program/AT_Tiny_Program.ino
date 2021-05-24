@@ -39,7 +39,7 @@
 // Pins
 #define PIN_LED             PCINT4
 #define PIN_LED_ENABLE      PCINT3
-#define PIN_SOLAR_CELL      A1
+#define PIN_MEASUREMENT      A1
 #define PIN_RX              PCINT1
 #define PIN_TX              PCINT0
 
@@ -72,7 +72,7 @@ SoftwareSerial mySerial(PIN_RX, PIN_TX);
 volatile bool awake = false;
 uint8_t current_sleep_cycles = 1; // Between 1 and 10 cycles = 8 to 80 seconds sleep
 uint8_t sleep_cycle_counter = 1;
-int brightness = 0;
+int soc = 0;
 uint8_t serial_process_position = 0;
 
 uint8_t mode = MODE_DEFAULT;
@@ -99,7 +99,7 @@ void setup() {
     led.show();
     
     // Setup Pins
-    pinMode(PIN_SOLAR_CELL, INPUT);
+    pinMode(PIN_MEASUREMENT, INPUT);
     pinMode(PIN_LED_ENABLE, OUTPUT);
 
     // Setup WDT
@@ -140,8 +140,8 @@ void loop() {
         if (sleep_cycle_counter == 0) {
             // After some sleep cycles
 
-            // Measure brightness on Solarcells
-            read_brightness();
+            // Measure state of charge
+            read_soc();
                     
             // Check Mode
             if (mode == MODE_DEFAULT) {
@@ -174,7 +174,7 @@ void loop() {
             }
           
             // Determine next sleep duration and set sleep_cycle_counter
-            current_sleep_cycles = map(brightness, 0, 1023, 15, 1);
+            current_sleep_cycles = map(soc, 0, 1023, 15, 1);
             sleep_cycle_counter = current_sleep_cycles;
         } else {
             // Short blink every 8 seconds
@@ -241,13 +241,9 @@ void handle_serial() {
                 update_eeprom(color_w_eeprom, color_w);
             }
             else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
-                read_brightness();
-                mySerial.print("Mode: ");
-                if (mode == 0) {
-                    mySerial.println("DEFAULT");
-                }
-                mySerial.print("PV Voltage: ");
-                mySerial.println(brightness);
+                read_soc();
+                mySerial.print("SOC: ");
+                mySerial.println(soc);
                 print_current_color();
             }
             else if (recv_buffer[0] == 'F' && recv_buffer[1] == 'J' && recv_buffer[2] == 'M') {
@@ -313,9 +309,9 @@ void disable_led() {
     digitalWrite(PIN_LED_ENABLE, LOW);
 }
 
-// GET BRIGHTNESS
-void read_brightness() {
-    brightness = analogRead(PIN_SOLAR_CELL);
+// GET SOC
+void read_soc() {
+    soc = analogRead(PIN_MEASUREMENT);
 }
 
 // BLINK LED
