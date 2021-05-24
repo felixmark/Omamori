@@ -578,13 +578,6 @@ F 3 "" H 5650 4000 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	8000 1150 6950 1150
-NoConn ~ 8500 3000
-Wire Wire Line
-	8100 1150 8100 2350
-Wire Wire Line
-	8100 2350 8200 2350
-Wire Wire Line
-	8200 2350 8200 3000
 Wire Wire Line
 	6950 3600 7700 3600
 Connection ~ 5650 3700
@@ -601,16 +594,6 @@ F 3 "~" H 5650 3850 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	5150 3700 5300 3700
-Wire Wire Line
-	8200 1150 8200 2300
-Wire Wire Line
-	8200 2300 8300 2300
-Wire Wire Line
-	8300 2300 8300 2650
-Wire Wire Line
-	8300 2650 8100 2650
-Wire Wire Line
-	8100 2650 8100 3000
 $Comp
 L pspice:DIODE D2
 U 1 1 60AAB4F1
@@ -622,16 +605,12 @@ F 3 "~" H 6100 1800 50  0001 C CNN
 	1    6100 1800
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	8000 1800 6300 1800
 Text Label 2850 2050 0    50   ~ 0
 Vsolar
 Wire Wire Line
 	5900 1800 3300 1800
 Wire Wire Line
 	3300 1800 3300 2050
-Wire Wire Line
-	8000 1800 8000 3000
 Text Label 7250 3600 0    50   ~ 0
 Vcc_ATTiny
 Text Label 5350 3100 0    50   ~ 0
@@ -699,4 +678,40 @@ F 3 "~" H 4400 2050 50  0001 C CNN
 	1    4400 2050
 	0    -1   -1   0   
 $EndComp
+Wire Wire Line
+	8200 1800 8200 3000
+Wire Wire Line
+	6300 1800 8200 1800
+Wire Wire Line
+	8100 3000 8100 1150
+Wire Wire Line
+	8200 1150 8200 1650
+Wire Wire Line
+	8200 1650 8000 1650
+Wire Wire Line
+	8000 1650 8000 3000
+Wire Wire Line
+	8900 3500 8900 3600
+Connection ~ 8900 3600
+Text Label 8550 3000 0    50   ~ 0
+Reset
+Wire Wire Line
+	9000 3400 9000 3500
+Wire Wire Line
+	8500 3000 8900 3000
+$Comp
+L own_symbols:TS-1233 U4
+U 1 1 60ACC29B
+P 8950 3200
+F 0 "U4" V 8996 3072 50  0000 R CNN
+F 1 "TS-1233" V 8905 3072 50  0000 R CNN
+F 2 "own_footprints:TS-1233" H 8950 3050 50  0001 C CNN
+F 3 "" H 8950 3050 50  0001 C CNN
+	1    8950 3200
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 8900 3400
+Wire Wire Line
+	8900 3500 9000 3500
+NoConn ~ 9000 3000
 $EndSCHEMATC
