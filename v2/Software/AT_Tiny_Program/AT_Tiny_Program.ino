@@ -50,7 +50,7 @@
 #define POS_WHT             3
 
 // Modes
-#define MODE_NORMAL         0
+#define MODE_DEFAULT         0
 
 
 
@@ -73,8 +73,9 @@ volatile bool awake = false;
 uint8_t current_sleep_cycles = 1; // Between 1 and 10 cycles = 8 to 80 seconds sleep
 uint8_t sleep_cycle_counter = 1;
 int brightness = 0;
+uint8_t serial_process_position = 0;
 
-uint8_t mode = MODE_NORMAL;
+uint8_t mode = MODE_DEFAULT;
 uint8_t color_r = 255;
 uint8_t color_g = 0;
 uint8_t color_b = 80;
@@ -110,9 +111,6 @@ void setup() {
     WDTCR |= (1 << WDIE);   // Watchdog Timeout Interrupt Enable
     sei();                  // Enable Interrupts
 
-    // Handle Serial communication
-    handle_serial();
-    
     // Restore variables from EEPROM if they are set
     mode = eeprom_read_byte(&mode_eeprom);
     if (mode != 0xFF) {
@@ -121,8 +119,11 @@ void setup() {
         color_b = eeprom_read_byte(&color_b_eeprom);
         color_w = eeprom_read_byte(&color_w_eeprom);
     } else {
-        mode = 0;
+        mode = MODE_DEFAULT;
     }
+
+    // Handle Serial communication
+    handle_serial();
     
     // Calculate offsets
     offsets[POS_RED] = color_r > 0 ? 1 : 0;
@@ -143,7 +144,7 @@ void loop() {
             read_brightness();
                     
             // Check Mode
-            if (mode == MODE_NORMAL) {
+            if (mode == MODE_DEFAULT) {
                 // Mode = RGBW
                 
                 enable_led();
@@ -197,37 +198,40 @@ void handle_serial() {
     mySerial.begin(SERIAL_BAUD);
     
     char recv_buffer[SERIAL_BUFFER_SIZE] = {};
-    uint8_t pos = 0;
     char character = 0;
 
     // Wait for incomming serial bytes
     while (millis() < SERIAL_TIMEFRAME) {
         // Read first line
         if (mySerial.available() > 0) {
+            uint8_t pos = 0;
+            serial_process_position = 0;
+            
             while (mySerial.available() > 0 && pos < SERIAL_BUFFER_SIZE) {
                 character = mySerial.read();
                 recv_buffer[pos++] = character;
+                delay(5);
             }
 
-            blink_led(0,50,0,0);
+            blink_led(0,0,50,0);
             delay(10);
             
             mySerial.print("Received: ");
-            for (uint8_t i = 0; i < SERIAL_BUFFER_SIZE; ++i) {
+            for (uint8_t i = 0; i < pos; ++i) {
                 mySerial.print(recv_buffer[i]);
             }
 
-            /*
-            if (cmd == "COL") {
-                mode = MODE_NORMAL;
+            if (recv_buffer[0] == 'C' && recv_buffer[1] == 'O' && recv_buffer[2] == 'L') {
+                mode = MODE_DEFAULT;
+
+                serial_process_position = 4;
                 
-                String values = received_string.substring(4);
-                color_r = get_value(values, ',', 0).toInt();
-                color_g = get_value(values, ',', 1).toInt();
-                color_b = get_value(values, ',', 2).toInt();
-                color_w = get_value(values, ';', 3).toInt();
+                color_r = get_value(recv_buffer, serial_process_position, ',');
+                color_g = get_value(recv_buffer, serial_process_position, ',');
+                color_b = get_value(recv_buffer, serial_process_position, ',');
+                color_w = get_value(recv_buffer, serial_process_position, ';');
         
-                mySerial.println("Received color.");
+                print_current_color();
         
                 // Update data in EEPROM if necessary
                 update_eeprom(mode_eeprom, mode);
@@ -236,18 +240,28 @@ void handle_serial() {
                 update_eeprom(color_b_eeprom, color_b);
                 update_eeprom(color_w_eeprom, color_w);
             }
-            
-            else */if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
+            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
                 read_brightness();
+                mySerial.print("Mode: ");
+                if (mode == 0) {
+                    mySerial.println("DEFAULT");
+                }
                 mySerial.print("PV Voltage: ");
                 mySerial.println(brightness);
+                print_current_color();
             }
+            else if (recv_buffer[0] == 'F' && recv_buffer[1] == 'J' && recv_buffer[2] == 'M') {
+                mySerial.println("UwU");
+            }
+            else {
+                mySerial.println("Unknown command.");
+            }
+
+            // Serial Request has been processed. Print new line.
             mySerial.println("");
         }
     }
     
-    blink_led(0,0,0,30);
-    delay(500);
     blink_led(0,0,0,30);
     mySerial.end();
 }
@@ -312,19 +326,39 @@ void blink_led(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
     disable_led();
 }
 
+// PRINT CURRENT COLOR
+void print_current_color() {
+    mySerial.print("R: ");
+    mySerial.println(color_r);
+    mySerial.print("G: ");
+    mySerial.println(color_g);
+    mySerial.print("B: ");
+    mySerial.println(color_b);
+    mySerial.print("W: ");
+    mySerial.println(color_w);
+}
+
 // GET VALUE FROM A STRING 
-String get_value(String data, char separator, int index) {
-    int found = 0;
-    int strIndex[] = { 0, -1 };
-    int maxIndex = data.length() - 1;
-    for (int i = 0; i <= maxIndex && found <= index; i++) {
-        if (data.charAt(i) == separator || i == maxIndex) {
-            found++;
-            strIndex[0] = strIndex[1] + 1;
-            strIndex[1] = (i == maxIndex) ? i+1 : i;
-        }
+uint8_t get_value(char data[SERIAL_BUFFER_SIZE], uint8_t begin_pos, char end_char) {
+    uint8_t value = 0;
+    uint8_t digit_cnt = 0;
+    for (int i = begin_pos; data[i] != end_char && i < SERIAL_BUFFER_SIZE; ++i) {
+        digit_cnt += 1;
     }
-    return found > index ? data.substring(strIndex[0], strIndex[1]) : "";
+    for (int i = begin_pos; i < begin_pos + digit_cnt; ++i) {
+        uint8_t next_digit = ((uint8_t) (data[i] - '0'));
+        
+        uint8_t multiplikator = 1;
+        uint8_t exponent = (digit_cnt - 1) - (i - begin_pos);
+        for (int u = 0; u < exponent; ++u) {
+            multiplikator *= 10;
+        }
+        next_digit *= multiplikator;
+        value += next_digit;
+    }
+    
+    serial_process_position += digit_cnt + 1;
+    return value;
 }
 
 // EETPROM FUNCTIONS

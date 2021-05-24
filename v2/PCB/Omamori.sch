@@ -607,10 +607,6 @@ F 3 "~" H 6100 1800 50  0001 C CNN
 $EndComp
 Text Label 2850 2050 0    50   ~ 0
 Vsolar
-Wire Wire Line
-	5900 1800 3300 1800
-Wire Wire Line
-	3300 1800 3300 2050
 Text Label 7250 3600 0    50   ~ 0
 Vcc_ATTiny
 Text Label 5350 3100 0    50   ~ 0
@@ -645,7 +641,7 @@ Connection ~ 5300 3700
 Wire Wire Line
 	5300 3700 5650 3700
 Text Label 7300 1800 0    50   ~ 0
-Vsolar_measure
+Vmeasure
 Text Label 8200 1550 0    50   ~ 0
 Tx
 Text Label 8100 1550 0    50   ~ 0
@@ -714,4 +710,9 @@ NoConn ~ 8900 3400
 Wire Wire Line
 	8900 3500 9000 3500
 NoConn ~ 9000 3000
+Wire Wire Line
+	5900 1800 5200 1800
+Wire Wire Line
+	5200 1800 5200 2450
+Connection ~ 5200 2450
 $EndSCHEMATC
