@@ -53,17 +53,6 @@ F 3 "" H 8900 3650 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Battery_Management:BQ25504 U1
-U 1 1 6049F0BD
-P 4550 3400
-F 0 "U1" H 5194 3446 50  0000 L CNN
-F 1 "BQ25504" H 5194 3355 50  0000 L CNN
-F 2 "footprints:VQFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 4550 3400 50  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/symlink/bq25504.pdf" H 4250 4200 50  0001 C CNN
-	1    4550 3400
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C_super1
 U 1 1 6058E241
 P 5200 2600
@@ -152,11 +141,11 @@ F 3 "" H 3300 2350 50  0001 C CNN
 $EndComp
 Connection ~ 4150 2050
 $Comp
-L Device:R R_oc1
+L Device:R R_oc1_10
 U 1 1 609D50F7
 P 3750 2300
-F 0 "R_oc1" H 3820 2346 50  0000 L CNN
-F 1 "3.9M" H 3820 2255 50  0000 L CNN
+F 0 "R_oc1_10" H 3820 2346 50  0000 L CNN
+F 1 "10M" H 3820 2255 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3680 2300 50  0001 C CNN
 F 3 "~" H 3750 2300 50  0001 C CNN
 	1    3750 2300
@@ -165,34 +154,29 @@ $EndComp
 $Comp
 L Device:R R_oc2
 U 1 1 609D577E
-P 3750 2600
-F 0 "R_oc2" H 3820 2646 50  0000 L CNN
-F 1 "6.2M" H 3820 2555 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3680 2600 50  0001 C CNN
-F 3 "~" H 3750 2600 50  0001 C CNN
-	1    3750 2600
-	1    0    0    -1  
+P 3600 2950
+F 0 "R_oc2" H 3670 2996 50  0000 L CNN
+F 1 "3.9M" H 3670 2905 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 3530 2950 50  0001 C CNN
+F 3 "~" H 3600 2950 50  0001 C CNN
+	1    3600 2950
+	0    1    1    0   
 $EndComp
 Wire Wire Line
 	3750 2150 3750 2050
 Connection ~ 3750 2050
 Wire Wire Line
 	3750 2050 4150 2050
-Wire Wire Line
-	3750 2450 3950 2450
-Wire Wire Line
-	3950 2450 3950 3100
-Connection ~ 3750 2450
 $Comp
 L power:GND #PWR06
 U 1 1 609DECA8
-P 3750 2750
-F 0 "#PWR06" H 3750 2500 50  0001 C CNN
-F 1 "GND" H 3755 2577 50  0000 C CNN
-F 2 "" H 3750 2750 50  0001 C CNN
-F 3 "" H 3750 2750 50  0001 C CNN
-	1    3750 2750
-	1    0    0    -1  
+P 3450 2950
+F 0 "#PWR06" H 3450 2700 50  0001 C CNN
+F 1 "GND" H 3455 2777 50  0000 C CNN
+F 2 "" H 3450 2950 50  0001 C CNN
+F 3 "" H 3450 2950 50  0001 C CNN
+	1    3450 2950
+	0    1    1    0   
 $EndComp
 Wire Wire Line
 	2550 2050 3300 2050
@@ -715,4 +699,35 @@ Wire Wire Line
 Wire Wire Line
 	5200 1800 5200 2450
 Connection ~ 5200 2450
+$Comp
+L Battery_Management:BQ25504 U1
+U 1 1 6049F0BD
+P 4550 3400
+F 0 "U1" H 5194 3446 50  0000 L CNN
+F 1 "BQ25504" H 5194 3355 50  0000 L CNN
+F 2 "footprints:VQFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm" H 4550 3400 50  0001 C CNN
+F 3 "http://www.ti.com/lit/ds/symlink/bq25504.pdf" H 4250 4200 50  0001 C CNN
+	1    4550 3400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3950 3100 3950 2950
+Wire Wire Line
+	3950 2950 3750 2950
+$Comp
+L Device:R R_oc1
+U 1 1 60AEA81A
+P 3750 2700
+F 0 "R_oc1" H 3820 2746 50  0000 L CNN
+F 1 "6.2M" H 3820 2655 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 3680 2700 50  0001 C CNN
+F 3 "~" H 3750 2700 50  0001 C CNN
+	1    3750 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 2850 3750 2950
+Connection ~ 3750 2950
+Wire Wire Line
+	3750 2550 3750 2450
 $EndSCHEMATC
