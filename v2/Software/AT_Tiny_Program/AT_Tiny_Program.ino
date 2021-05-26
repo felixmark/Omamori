@@ -7,9 +7,11 @@
     Serial Protocol:
     <cmd>:<values (if needed)>;
     
-    So for instance:
-    STA                                                     // Get Status
+    List of commands:
+    STA;                                                    // Get Status
     COL:<red byte>,<green byte>,<blue byte>,<white byte>;   // Set Color
+    BAT;                                                    // Set Mode to Battery display
+    DEF;                                                    // Set Mode to Default
 
     Available Modes are:
     0 - rgbw
@@ -50,7 +52,8 @@
 #define POS_WHT             3
 
 // Modes
-#define MODE_DEFAULT         0
+#define MODE_DEFAULT        0
+#define MODE_BATTERY        1
 
 
 
@@ -89,6 +92,7 @@ uint8_t color_r_eeprom EEMEM;
 uint8_t color_g_eeprom EEMEM;
 uint8_t color_b_eeprom EEMEM;
 uint8_t color_w_eeprom EEMEM;
+uint8_t color_set_eeprom EEMEM;
 
 
 
@@ -112,14 +116,15 @@ void setup() {
     sei();                  // Enable Interrupts
 
     // Restore variables from EEPROM if they are set
-    mode = eeprom_read_byte(&mode_eeprom);
-    if (mode != 0xFF) {
+    uint8_t temp_mode = eeprom_read_byte(&mode_eeprom);
+    if (temp_mode != 0xFF) {
+        mode = temp_mode;
+    }
+    if (eeprom_read_byte(&color_set_eeprom) != 0xFF) {
         color_r = eeprom_read_byte(&color_r_eeprom);
         color_g = eeprom_read_byte(&color_g_eeprom);
         color_b = eeprom_read_byte(&color_b_eeprom);
         color_w = eeprom_read_byte(&color_w_eeprom);
-    } else {
-        mode = MODE_DEFAULT;
     }
 
     // Handle Serial communication
@@ -137,53 +142,58 @@ void setup() {
 void loop() {
     if (awake) {
         
+        // Measure state of charge
+        read_soc();
+      
         if (sleep_cycle_counter == 0) {
             // After some sleep cycles
 
-            // Measure state of charge
-            read_soc();
-                    
-            // Check Mode
-            if (mode == MODE_DEFAULT) {
-                // Mode = RGBW
-                
-                enable_led();
+            enable_led();
 
-                int8_t pos = 0;
-                for (; pos < NUM_ELEMENTS; ++pos) {
-                    uint16_t value = SIGMOID[pos];
-                    show_color(
-                        offsets[POS_RED] + (((color_r * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_GRN] + (((color_g * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_BLU] + (((color_b * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_WHT] + (((color_w * value) / 255) * MAXIMUM_BRIGHTNESS) / 254
-                    );
-                    delay(ANIMATION_DELAY);
-                }
-                for (pos = NUM_ELEMENTS - 1; pos >= 0; --pos) {
-                    uint16_t value = SIGMOID[pos];
-                    show_color(
-                        offsets[POS_RED] + (((color_r * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_GRN] + (((color_g * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_BLU] + (((color_b * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
-                        offsets[POS_WHT] + (((color_w * value) / 255) * MAXIMUM_BRIGHTNESS) / 254
-                    );
-                    delay(ANIMATION_DELAY);
-                }
-                disable_led();
+            int8_t pos = 0;
+            for (; pos < NUM_ELEMENTS; ++pos) {
+                uint16_t value = SIGMOID[pos];
+                show_color(
+                    offsets[POS_RED] + (((color_r * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_GRN] + (((color_g * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_BLU] + (((color_b * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_WHT] + (((color_w * value) / 255) * MAXIMUM_BRIGHTNESS) / 254
+                );
+                delay(ANIMATION_DELAY);
             }
+            for (pos = NUM_ELEMENTS - 1; pos >= 0; --pos) {
+                uint16_t value = SIGMOID[pos];
+                show_color(
+                    offsets[POS_RED] + (((color_r * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_GRN] + (((color_g * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_BLU] + (((color_b * value) / 255) * MAXIMUM_BRIGHTNESS) / 254,
+                    offsets[POS_WHT] + (((color_w * value) / 255) * MAXIMUM_BRIGHTNESS) / 254
+                );
+                delay(ANIMATION_DELAY);
+            }
+            disable_led();
           
             // Determine next sleep duration and set sleep_cycle_counter
             current_sleep_cycles = map(soc, 0, 1023, 15, 1);
             sleep_cycle_counter = current_sleep_cycles;
         } else {
-            // Short blink every 8 seconds
-            blink_led(
-                offsets[POS_RED] + (color_r * MAXIMUM_BRIGHTNESS / 4) / 254,
-                offsets[POS_GRN] + (color_g * MAXIMUM_BRIGHTNESS / 4) / 254,
-                offsets[POS_BLU] + (color_b * MAXIMUM_BRIGHTNESS / 4) / 254,
-                offsets[POS_WHT] + (color_w * MAXIMUM_BRIGHTNESS / 4) / 254
-            );
+            if (mode == MODE_DEFAULT) {
+                // Short blink every 8 seconds
+                blink_led(
+                    offsets[POS_RED] + (color_r * MAXIMUM_BRIGHTNESS / 4) / 254,
+                    offsets[POS_GRN] + (color_g * MAXIMUM_BRIGHTNESS / 4) / 254,
+                    offsets[POS_BLU] + (color_b * MAXIMUM_BRIGHTNESS / 4) / 254,
+                    offsets[POS_WHT] + (color_w * MAXIMUM_BRIGHTNESS / 4) / 254
+                );
+            } else {
+                if (soc < 614) {
+                    blink_led(30,0,0,0);
+                } else if (soc < 818) {
+                    blink_led(0,0,0,30);
+                } else {
+                    blink_led(0,30,0,0);
+                }
+            }
         }   
     }
     go_to_bed();
@@ -199,6 +209,9 @@ void handle_serial() {
     
     char recv_buffer[SERIAL_BUFFER_SIZE] = {};
     char character = 0;
+
+    // Send current color
+    print_current_color();
 
     // Wait for incomming serial bytes
     while (millis() < SERIAL_TIMEFRAME) {
@@ -222,8 +235,6 @@ void handle_serial() {
             }
 
             if (recv_buffer[0] == 'C' && recv_buffer[1] == 'O' && recv_buffer[2] == 'L') {
-                mode = MODE_DEFAULT;
-
                 serial_process_position = 4;
                 
                 color_r = get_value(recv_buffer, serial_process_position, ',');
@@ -234,7 +245,7 @@ void handle_serial() {
                 print_current_color();
         
                 // Update data in EEPROM if necessary
-                update_eeprom(mode_eeprom, mode);
+                update_eeprom(color_set_eeprom, 1);
                 update_eeprom(color_r_eeprom, color_r);
                 update_eeprom(color_g_eeprom, color_g);
                 update_eeprom(color_b_eeprom, color_b);
@@ -248,6 +259,16 @@ void handle_serial() {
             }
             else if (recv_buffer[0] == 'F' && recv_buffer[1] == 'J' && recv_buffer[2] == 'M') {
                 mySerial.println("UwU");
+            }
+            else if (recv_buffer[0] == 'B' && recv_buffer[1] == 'A' && recv_buffer[2] == 'T') {
+                mode = MODE_BATTERY;
+                update_eeprom(mode_eeprom, mode);
+                mySerial.println("Mode: Battery");
+            }
+            else if (recv_buffer[0] == 'D' && recv_buffer[1] == 'E' && recv_buffer[2] == 'F') {
+                mode = MODE_DEFAULT;
+                update_eeprom(mode_eeprom, mode);
+                mySerial.println("Mode: Default");
             }
             else {
                 mySerial.println("Unknown command.");
@@ -324,14 +345,15 @@ void blink_led(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
 
 // PRINT CURRENT COLOR
 void print_current_color() {
-    mySerial.print("R: ");
-    mySerial.println(color_r);
-    mySerial.print("G: ");
-    mySerial.println(color_g);
-    mySerial.print("B: ");
-    mySerial.println(color_b);
-    mySerial.print("W: ");
-    mySerial.println(color_w);
+    mySerial.print("COL:");
+    mySerial.print(color_r);
+    mySerial.print(",");
+    mySerial.print(color_g);
+    mySerial.print(",");
+    mySerial.print(color_b);
+    mySerial.print(",");
+    mySerial.print(color_w);
+    mySerial.println(";");
 }
 
 // GET VALUE FROM A STRING 
