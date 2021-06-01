@@ -30,6 +30,7 @@
 
 
 // ============================================================= DEFINES
+#define VERSION             "1.0"
 #define SERIAL_BAUD         19200
 #define MAXIMUM_BRIGHTNESS  70
 #define BLINK_ON_TIME       10
@@ -211,6 +212,7 @@ void handle_serial() {
     char character = 0;
 
     // Send current color
+    mySerial.println("Omamori v" VERSION);
     print_current_color();
 
     // Wait for incomming serial bytes
@@ -242,7 +244,7 @@ void handle_serial() {
                 color_b = get_value(recv_buffer, serial_process_position, ',');
                 color_w = get_value(recv_buffer, serial_process_position, ';');
         
-                print_current_color();
+                mySerial.println("Color set.");
         
                 // Update data in EEPROM if necessary
                 update_eeprom(color_set_eeprom, 1);
