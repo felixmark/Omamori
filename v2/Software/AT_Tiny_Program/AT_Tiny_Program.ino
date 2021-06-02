@@ -244,7 +244,7 @@ void handle_serial() {
                 color_b = get_value(recv_buffer, serial_process_position, ',');
                 color_w = get_value(recv_buffer, serial_process_position, ';');
         
-                mySerial.println("Color set.");
+                mySerial.println("SET color.");
         
                 // Update data in EEPROM if necessary
                 update_eeprom(color_set_eeprom, 1);
@@ -253,14 +253,8 @@ void handle_serial() {
                 update_eeprom(color_b_eeprom, color_b);
                 update_eeprom(color_w_eeprom, color_w);
             }
-            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
-                read_soc();
-                mySerial.print("SOC: ");
-                mySerial.println(soc);
-                print_current_color();
-            }
-            else if (recv_buffer[0] == 'F' && recv_buffer[1] == 'J' && recv_buffer[2] == 'M') {
-                mySerial.println("UwU");
+            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'E' && recv_buffer[2] == 'T') {
+                break;
             }
             else if (recv_buffer[0] == 'B' && recv_buffer[1] == 'A' && recv_buffer[2] == 'T') {
                 mode = MODE_BATTERY;
@@ -271,6 +265,15 @@ void handle_serial() {
                 mode = MODE_DEFAULT;
                 update_eeprom(mode_eeprom, mode);
                 mySerial.println("Mode: Default");
+            }
+            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
+                read_soc();
+                mySerial.print("SOC: ");
+                mySerial.println(soc);
+                print_current_color();
+            }
+            else if (recv_buffer[0] == 'F' && recv_buffer[1] == 'J' && recv_buffer[2] == 'M') {
+                mySerial.println("UwU");
             }
             else {
                 mySerial.println("Unknown command.");
