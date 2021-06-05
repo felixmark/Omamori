@@ -5,7 +5,7 @@ Omamori is a solar-powered LED pendant for necklaces.
 
 ## Version 2
 
-**MCU:** 1x ATTiny ATTiny 85  
+**MCU:** 1x ATTiny 85  
 **Energy Harvester:** 1x BQ25504  
 **Solar Cells:** 2x KXOB25-05X3F   
 **Boost Converter:** 1x TPS61222  
