@@ -42,7 +42,7 @@
 // Pins
 #define PIN_LED             PCINT4
 #define PIN_LED_ENABLE      PCINT3
-#define PIN_MEASUREMENT      A1
+#define PIN_MEASUREMENT     A1
 #define PIN_RX              PCINT1
 #define PIN_TX              PCINT0
 
@@ -244,7 +244,7 @@ void handle_serial() {
                 color_b = get_value(recv_buffer, serial_process_position, ',');
                 color_w = get_value(recv_buffer, serial_process_position, ';');
         
-                mySerial.println("SET color.");
+                print_current_color();
         
                 // Update data in EEPROM if necessary
                 update_eeprom(color_set_eeprom, 1);
@@ -252,9 +252,6 @@ void handle_serial() {
                 update_eeprom(color_g_eeprom, color_g);
                 update_eeprom(color_b_eeprom, color_b);
                 update_eeprom(color_w_eeprom, color_w);
-            }
-            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'E' && recv_buffer[2] == 'T') {
-                break;
             }
             else if (recv_buffer[0] == 'B' && recv_buffer[1] == 'A' && recv_buffer[2] == 'T') {
                 mode = MODE_BATTERY;
@@ -281,6 +278,7 @@ void handle_serial() {
 
             // Serial Request has been processed. Print new line.
             mySerial.println("");
+            break;
         }
     }
     
@@ -325,13 +323,13 @@ void show_color(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
 // ENABLE LED
 void enable_led() {
     digitalWrite(PIN_LED_ENABLE, HIGH);
-    delay(5);
+    delay(10);
 }
 
 // DISABLE LED
 void disable_led() {
     show_color(0,0,0,0);
-    delay(5);
+    delay(10);
     digitalWrite(PIN_LED_ENABLE, LOW);
 }
 
