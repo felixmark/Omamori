@@ -12,9 +12,9 @@ Thank you as well for helping me with the soldering and designing, Andreas and M
 
 ## History
 
-[Version_0.2.1]: #Version_0.2.1	"Version 0.2.1"
-[Version_0.2.0]: #Version_0.2.0	"Version 0.2.0"
-[Version_0.1.0]: #Version_0.1.0	"Version 0.1.0"
+[Version 0.2.1](#Version-0.2.1)  
+[Version 0.2.0](#Version-0.2.0)  
+[Version 0.1.0](#Version-0.1.0)  
 
 
 
