@@ -15,10 +15,6 @@ Thank you as well for helping me with the soldering and designing, Andreas and M
 
 ## Version 0.2.1
 Hardware as in Version 0.2.0. \
-Huge THANK YOU to Kris Winer who wrote this article: \
-https://hackaday.io/project/158837-ultra-low-power-lipo-charger-via-energy-harvesting/log/149075-vstor-is-not-vsyst \
-\
-Main changes: No use of the EN and VSTOR pins.\
 \
 This Version is currently in development. Stay tuned for updates!
 <br><br>
