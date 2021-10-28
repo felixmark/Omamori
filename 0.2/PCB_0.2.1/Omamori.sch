@@ -504,12 +504,6 @@ $EndComp
 Wire Wire Line
 	10050 2800 9450 2800
 Connection ~ 9450 2800
-Wire Wire Line
-	5150 3100 5900 3100
-Wire Wire Line
-	5950 3800 5900 3800
-Wire Wire Line
-	5900 3800 5900 3100
 $Comp
 L Device:R R_data1
 U 1 1 60A307A3
@@ -549,35 +543,10 @@ Wire Wire Line
 	6950 1150 6950 3600
 Wire Wire Line
 	5650 3700 5950 3700
-$Comp
-L power:GND #PWR013
-U 1 1 60A0DF2C
-P 5650 4000
-F 0 "#PWR013" H 5650 3750 50  0001 C CNN
-F 1 "GND" H 5655 3827 50  0000 C CNN
-F 2 "" H 5650 4000 50  0001 C CNN
-F 3 "" H 5650 4000 50  0001 C CNN
-	1    5650 4000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8000 1150 6950 1150
 Wire Wire Line
 	6950 3600 7700 3600
-Connection ~ 5650 3700
-$Comp
-L Device:C C_pre_boost1
-U 1 1 609F0244
-P 5650 3850
-F 0 "C_pre_boost1" H 5765 3896 50  0000 L CNN
-F 1 "10uF" H 5765 3805 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 5688 3700 50  0001 C CNN
-F 3 "~" H 5650 3850 50  0001 C CNN
-	1    5650 3850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5150 3700 5300 3700
 $Comp
 L pspice:DIODE D2
 U 1 1 60AAB4F1
@@ -595,35 +564,8 @@ Text Label 7250 3600 0    50   ~ 0
 Vcc_ATTiny
 Text Label 5350 3100 0    50   ~ 0
 Vbat_ok
-Text Label 5300 3700 0    50   ~ 0
-Vstor
 Text Label 3450 3200 0    50   ~ 0
 Vr_div
-$Comp
-L power:GND #PWR014
-U 1 1 609F4F40
-P 5300 4000
-F 0 "#PWR014" H 5300 3750 50  0001 C CNN
-F 1 "GND" H 5305 3827 50  0000 C CNN
-F 2 "" H 5300 4000 50  0001 C CNN
-F 3 "" H 5300 4000 50  0001 C CNN
-	1    5300 4000
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C_filter1
-U 1 1 609F4440
-P 5300 3850
-F 0 "C_filter1" H 5415 3896 50  0000 L CNN
-F 1 "0.1uF" H 5415 3805 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5338 3700 50  0001 C CNN
-F 3 "~" H 5300 3850 50  0001 C CNN
-	1    5300 3850
-	1    0    0    -1  
-$EndComp
-Connection ~ 5300 3700
-Wire Wire Line
-	5300 3700 5650 3700
 Text Label 7300 1800 0    50   ~ 0
 Vmeasure
 Text Label 8200 1550 0    50   ~ 0
@@ -736,4 +678,62 @@ Wire Wire Line
 	3600 2950 3550 2950
 Wire Wire Line
 	3250 2950 3200 2950
+Wire Wire Line
+	5950 3800 5900 3800
+Connection ~ 5650 3700
+$Comp
+L power:GND #PWR014
+U 1 1 609F4F40
+P 5300 4000
+F 0 "#PWR014" H 5300 3750 50  0001 C CNN
+F 1 "GND" H 5305 3827 50  0000 C CNN
+F 2 "" H 5300 4000 50  0001 C CNN
+F 3 "" H 5300 4000 50  0001 C CNN
+	1    5300 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR013
+U 1 1 60A0DF2C
+P 5650 4000
+F 0 "#PWR013" H 5650 3750 50  0001 C CNN
+F 1 "GND" H 5655 3827 50  0000 C CNN
+F 2 "" H 5650 4000 50  0001 C CNN
+F 3 "" H 5650 4000 50  0001 C CNN
+	1    5650 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C_pre_boost1
+U 1 1 609F0244
+P 5650 3850
+F 0 "C_pre_boost1" H 5765 3896 50  0000 L CNN
+F 1 "10uF" H 5765 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 5688 3700 50  0001 C CNN
+F 3 "~" H 5650 3850 50  0001 C CNN
+	1    5650 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5900 3800 5900 3100
+Wire Wire Line
+	5150 3100 5900 3100
+$Comp
+L Device:C C_filter1
+U 1 1 609F4440
+P 5300 3850
+F 0 "C_filter1" H 5415 3896 50  0000 L CNN
+F 1 "0.1uF" H 5415 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5338 3700 50  0001 C CNN
+F 3 "~" H 5300 3850 50  0001 C CNN
+	1    5300 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5150 3700 5300 3700
+Connection ~ 5300 3700
+Wire Wire Line
+	5300 3700 5650 3700
+Text Label 5300 3700 0    50   ~ 0
+Vstor
 $EndSCHEMATC

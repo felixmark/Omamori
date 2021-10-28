@@ -1,3 +1,0 @@
-(sym_lib_table
-  (lib (name Omamori-rescue)(type Legacy)(uri ${KIPRJMOD}/Omamori-rescue.lib)(options "")(descr ""))
-)
