@@ -25,7 +25,7 @@ This Version is currently in development. Stay tuned for updates!
 \
 **MCU:** 1x ATTiny 85 \
 **Energy Harvester:** 1x BQ25504 \
-**Solar Cells:** 2x KXOB25-05X3F \ 
+**Solar Cells:** 2x KXOB25-05X3F \
 **Boost Converter:** 1x TPS61222 \
 **LED:** 1x SK6812 programmable RGBW LED
 <br><br>
