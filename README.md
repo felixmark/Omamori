@@ -14,14 +14,16 @@ Thank you as well for helping me with the soldering and designing, Andreas and M
 <br><br>
 
 ## Version 0.2.1
-Hardware as in Version 0.2.0. \
+
+![PCB v2.0](./0.2/Images/pcb_0.2.1.jpg)
+
+![PCB v2.0](./0.2/Images/schematic_0.2.1.png)
 \
-This Version is currently in development. Stay tuned for updates!
+Hardware as in Version 0.2.0 except a few resistors instead of the diode for measuring battery voltage and an IRLML2502TRPBF N-Channel MOSFET for switching the 5V boost converter.
 <br><br>
 
 ## Version 0.2.0
-![PCB v2.0](./0.2/Images/Final_front.png)
-![PCB v2.0](./0.2/Images/Final_back.png)
+![PCB v2.0](./0.2/Images/pcb_0.2.0.jpg)
 \
 **MCU:** 1x ATTiny 85 \
 **Energy Harvester:** 1x BQ25504 \
@@ -36,4 +38,4 @@ This Version is currently in development. Stay tuned for updates!
 **MCU:** 1x MSP430G2210 \
 **Energy Harvester:** 1x LTC3105 \
 **Solar Cells:** 2x KXOB22-04X3L 1.5Vmpp \
-**LED:** 1x Natural White LED \
+**LED:** 1x Natural White LED
