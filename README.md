@@ -4,7 +4,25 @@
 Omamori is a solar-powered LED pendant for necklaces.
 I have got the motivation to realize this project during my time in university, when I first designed PCBs, even though I had the idea for much longer.
 At first, I was using Altium Designer, which was used by my university. Later in Version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas (Thank you!).
-Thank you as well for helping me with the soldering and designing, Andreas and Markus.
+Thank you as well for helping me with the soldering and designing, Andreas and Markus. \
+\
+
+## Programming
+
+Set internal clock to 8MHz -> Burn Bootloader and Flash Software
+Serial: 19200 BAUD
+Serial Protocol:
+
+```
+<cmd>:<values (if needed)>;
+
+List of commands:
+STA;                                                    // Get [STA]tus
+COL:<red byte>,<green byte>,<blue byte>,<white byte>;   // Set [COL]or (i.e. COL:255,0,80,100;)
+BAT;                                                    // Set Mode to [BAT]tery display
+DEF;                                                    // Set Mode to [DEF]ault
+```
+
 <br><br>
 
 ## History

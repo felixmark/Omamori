@@ -15,6 +15,7 @@
 
     Available Modes are:
     0 - rgbw
+    1 - battery
 */
 
 
