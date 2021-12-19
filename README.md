@@ -5,7 +5,7 @@ Omamori is a solar-powered LED lucky and protector charm.
 I have got the motivation to realize this project during my time in university, when I first designed PCBs, even though I had the idea for much longer.
 At first, I was using Altium Designer, which was used by my university. Later since version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas.
 A huge thank you for helping me with soldering, designing, listening and keeping my motivation up to: \
-Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3 \
+Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3
 <br>
 
 ## Programming
@@ -44,7 +44,7 @@ A version History of the Omamori project.
 
 ![PCB v2.0](./0.2/Images/schematic_0.2.1.png)
 \
-Hardware as in Version 0.2.0 except a few resistors instead of the diode for measuring battery voltage and an IRLML2502TRPBF N-Channel MOSFET for switching the 5V boost converter. \
+Hardware as in Version 0.2.0 except a few resistors instead of the diode for measuring battery voltage and an IRLML2502TRPBF N-Channel MOSFET for switching the 5V boost converter.
 
 <br><br>
 
@@ -55,7 +55,7 @@ Hardware as in Version 0.2.0 except a few resistors instead of the diode for mea
 **Energy Harvester:** 1x BQ25504 \
 **Solar Cells:** 2x KXOB25-05X3F \
 **Boost Converter:** 1x TPS61222 \
-**LED:** 1x SK6812 programmable RGBW LED \
+**LED:** 1x SK6812 programmable RGBW LED
 
 ### Energy Harvester (BQ25504) properties
 
