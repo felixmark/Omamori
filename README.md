@@ -6,7 +6,7 @@ I have got the motivation to realize this project during my time in university, 
 At first, I was using Altium Designer, which was used by my university. Later since version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas.
 A huge thank you for helping me with soldering, designing, listening and keeping my motivation up to: \
 Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3 \
-\
+<br>
 
 ## Programming
 
