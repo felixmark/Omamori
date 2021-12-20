@@ -12,10 +12,6 @@
     COL:<red byte>,<green byte>,<blue byte>,<white byte>;   // Set Color
     BAT;                                                    // Set Mode to Battery display
     DEF;                                                    // Set Mode to Default
-
-    Available Modes are:
-    0 - rgbw
-    1 - battery
 */
 
 

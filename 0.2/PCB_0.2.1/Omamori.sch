@@ -40,17 +40,6 @@ F 3 "" H 3850 4250 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L power:GND #PWR018
-U 1 1 60504B03
-P 9750 3700
-F 0 "#PWR018" H 9750 3450 50  0001 C CNN
-F 1 "GND" H 9755 3527 50  0000 C CNN
-F 2 "" H 9750 3700 50  0001 C CNN
-F 3 "" H 9750 3700 50  0001 C CNN
-	1    9750 3700
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C_super1
 U 1 1 6058E241
 P 4300 2600
@@ -75,17 +64,6 @@ F 2 "" H 4300 2750 50  0001 C CNN
 F 3 "" H 4300 2750 50  0001 C CNN
 	1    4300 2750
 	1    0    0    -1  
-$EndComp
-$Comp
-L MCU_Microchip_ATtiny:ATtiny13A-SSU U3
-U 1 1 604F4615
-P 9050 3600
-F 0 "U3" V 8475 3600 50  0000 C CNN
-F 1 "ATtiny85" V 8384 3600 50  0000 C CNN
-F 2 "Package_SO:SOIC-8_5.275x5.275mm_P1.27mm" H 9050 3600 50  0001 C CIN
-F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/doc8126.pdf" H 9050 3600 50  0001 C CNN
-	1    9050 3600
-	0    -1   -1   0   
 $EndComp
 Wire Wire Line
 	3250 2050 3250 2600
@@ -393,17 +371,6 @@ F 3 "http://www.ti.com/lit/ds/symlink/tps61220.pdf" H 6300 3550 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	6700 3600 6900 3600
-$Comp
-L power:GND #PWR015
-U 1 1 609EFD45
-P 6300 4000
-F 0 "#PWR015" H 6300 3750 50  0001 C CNN
-F 1 "GND" H 6305 3827 50  0000 C CNN
-F 2 "" H 6300 4000 50  0001 C CNN
-F 3 "" H 6300 4000 50  0001 C CNN
-	1    6300 4000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6700 3800 6700 3600
 Connection ~ 6700 3600
@@ -421,17 +388,6 @@ F 3 "~" H 6900 3750 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 6900 3600
-$Comp
-L power:GND #PWR016
-U 1 1 60A26919
-P 6900 4000
-F 0 "#PWR016" H 6900 3750 50  0001 C CNN
-F 1 "GND" H 6905 3827 50  0000 C CNN
-F 2 "" H 6900 4000 50  0001 C CNN
-F 3 "" H 6900 4000 50  0001 C CNN
-	1    6900 4000
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6900 4000 6900 3900
 Wire Wire Line
@@ -451,17 +407,6 @@ F 3 "~" H 9750 2900 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	9600 2900 9150 2900
-$Comp
-L power:GND #PWR017
-U 1 1 609EA8D2
-P 9050 1150
-F 0 "#PWR017" H 9050 900 50  0001 C CNN
-F 1 "GND" H 9055 977 50  0000 C CNN
-F 2 "" H 9050 1150 50  0001 C CNN
-F 3 "" H 9050 1150 50  0001 C CNN
-	1    9050 1150
-	1    0    0    -1  
-$EndComp
 $Comp
 L Connector:Conn_01x04_Female J1
 U 1 1 60A1387B
@@ -579,23 +524,12 @@ Connection ~ 5600 3700
 $Comp
 L power:GND #PWR014
 U 1 1 609F4F40
-P 5250 4000
-F 0 "#PWR014" H 5250 3750 50  0001 C CNN
-F 1 "GND" H 5255 3827 50  0000 C CNN
-F 2 "" H 5250 4000 50  0001 C CNN
-F 3 "" H 5250 4000 50  0001 C CNN
-	1    5250 4000
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR013
-U 1 1 60A0DF2C
-P 5600 4000
-F 0 "#PWR013" H 5600 3750 50  0001 C CNN
-F 1 "GND" H 5605 3827 50  0000 C CNN
-F 2 "" H 5600 4000 50  0001 C CNN
-F 3 "" H 5600 4000 50  0001 C CNN
-	1    5600 4000
+P 4250 4000
+F 0 "#PWR014" H 4250 3750 50  0001 C CNN
+F 1 "GND" H 4255 3827 50  0000 C CNN
+F 2 "" H 4250 4000 50  0001 C CNN
+F 3 "" H 4250 4000 50  0001 C CNN
+	1    4250 4000
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -612,12 +546,12 @@ $EndComp
 $Comp
 L Device:C C_filter1
 U 1 1 609F4440
-P 5250 3850
-F 0 "C_filter1" H 5365 3896 50  0000 L CNN
-F 1 "0.1uF" H 5365 3805 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 5288 3700 50  0001 C CNN
-F 3 "~" H 5250 3850 50  0001 C CNN
-	1    5250 3850
+P 4250 3850
+F 0 "C_filter1" H 4365 3896 50  0000 L CNN
+F 1 "0.1uF" H 4365 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 4288 3700 50  0001 C CNN
+F 3 "~" H 4250 3850 50  0001 C CNN
+	1    4250 3850
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -636,27 +570,6 @@ Wire Wire Line
 	850  2050 2500 2050
 Text Label 4350 3100 0    50   ~ 0
 Vbat_ok
-$Comp
-L Transistor_FET:IRLML0030 Q1
-U 1 1 61BDECD2
-P 4750 3100
-F 0 "Q1" H 4954 3146 50  0000 L CNN
-F 1 "IRLML0030" H 4954 3055 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 4950 3025 50  0001 L CIN
-F 3 "https://www.infineon.com/dgdl/irlml0030pbf.pdf?fileId=5546d462533600a401535664773825df" H 4750 3100 50  0001 L CNN
-	1    4750 3100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4250 3100 4550 3100
-Wire Wire Line
-	4300 2450 4850 2450
-Wire Wire Line
-	4850 2450 4850 2900
-Connection ~ 4300 2450
-NoConn ~ 4250 3700
-Wire Wire Line
-	4850 3300 4850 3700
 Wire Wire Line
 	5850 3800 5850 3700
 Connection ~ 5850 3700
@@ -695,22 +608,8 @@ F 3 "~" H 7950 2000 50  0001 C CNN
 	1    7950 2000
 	-1   0    0    1   
 $EndComp
-$Comp
-L power:GND #PWR0101
-U 1 1 61C27B5D
-P 7950 2450
-F 0 "#PWR0101" H 7950 2200 50  0001 C CNN
-F 1 "GND" H 7955 2277 50  0000 C CNN
-F 2 "" H 7950 2450 50  0001 C CNN
-F 3 "" H 7950 2450 50  0001 C CNN
-	1    7950 2450
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	7950 1850 7950 1800
-Wire Wire Line
-	4850 3700 5250 3700
-Connection ~ 5250 3700
 Wire Wire Line
 	6900 3600 8450 3600
 Wire Wire Line
@@ -724,58 +623,6 @@ Wire Wire Line
 Wire Wire Line
 	7950 1800 8950 1800
 Connection ~ 7950 1800
-$Comp
-L LED:SK6812 D1
-U 1 1 604F2786
-P 10400 5450
-F 0 "D1" H 10744 5496 50  0000 L CNN
-F 1 "SK6812" H 10744 5405 50  0000 L CNN
-F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 10450 5150 50  0001 L TNN
-F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 10500 5075 50  0001 L TNN
-	1    10400 5450
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR019
-U 1 1 6050B2D5
-P 10400 5750
-F 0 "#PWR019" H 10400 5500 50  0001 C CNN
-F 1 "GND" H 10405 5577 50  0000 C CNN
-F 2 "" H 10400 5750 50  0001 C CNN
-F 3 "" H 10400 5750 50  0001 C CNN
-	1    10400 5750
-	1    0    0    -1  
-$EndComp
-NoConn ~ 10700 5450
-Text Label 10100 5200 0    50   ~ 0
-Din_LED
-$Comp
-L Device:C C_led1
-U 1 1 60A4741C
-P 10550 5050
-F 0 "C_led1" H 10665 5096 50  0000 L CNN
-F 1 "100nF" H 10665 5005 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 10588 4900 50  0001 C CNN
-F 3 "~" H 10550 5050 50  0001 C CNN
-	1    10550 5050
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	10400 5150 10400 5050
-Connection ~ 10400 5050
-$Comp
-L power:GND #PWR020
-U 1 1 60A47EBA
-P 10700 5050
-F 0 "#PWR020" H 10700 4800 50  0001 C CNN
-F 1 "GND" H 10705 4877 50  0000 C CNN
-F 2 "" H 10700 5050 50  0001 C CNN
-F 3 "" H 10700 5050 50  0001 C CNN
-	1    10700 5050
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	10100 5450 10100 2900
 Wire Wire Line
 	10100 2900 9900 2900
 Wire Wire Line
@@ -784,23 +631,159 @@ Wire Wire Line
 	9650 3600 9750 3600
 Connection ~ 9750 3600
 Wire Wire Line
-	9750 3600 9750 3700
-Wire Wire Line
 	9050 2800 10400 2800
-Wire Wire Line
-	10400 2800 10400 5050
-Text Notes 5600 3150 0    79   ~ 0
+Text Notes 5650 3150 0    79   ~ 0
 5V Boost Converter\n
 Text Notes 7300 1450 0    118  ~ 0
 Voltage Divider\n
 Text Notes 8450 850  0    118  ~ 0
 Serial Pins\n
-Text Notes 8750 4600 0    118  ~ 0
+Text Notes 8750 4650 0    118  ~ 0
 AT Tiny\n
-Text Notes 9050 5500 0    118  ~ 0
+Text Notes 10050 4650 0    118  ~ 0
 RGBW LED
-Text Notes 2500 1500 0    118  ~ 0
+Text Notes 2600 1600 0    118  ~ 0
 Solar charge controller
 Text Notes 550  1850 0    118  ~ 0
 Photovoltaic
+$Comp
+L power:GND #PWR0101
+U 1 1 61C12810
+P 4450 4000
+F 0 "#PWR0101" H 4450 3750 50  0001 C CNN
+F 1 "GND" H 4455 3827 50  0000 C CNN
+F 2 "" H 4450 4000 50  0001 C CNN
+F 3 "" H 4450 4000 50  0001 C CNN
+	1    4450 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C_Stor1
+U 1 1 61C12816
+P 4450 3850
+F 0 "C_Stor1" H 4565 3896 50  0000 L CNN
+F 1 "10uF" H 4565 3805 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.18x1.45mm_HandSolder" H 4488 3700 50  0001 C CNN
+F 3 "~" H 4450 3850 50  0001 C CNN
+	1    4450 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4250 3700 4450 3700
+Connection ~ 4250 3700
+Connection ~ 4300 2450
+Wire Wire Line
+	5250 1800 4300 1800
+Wire Wire Line
+	4300 1800 4300 2450
+Connection ~ 5250 1800
+$Comp
+L MCU_Microchip_ATtiny:ATtiny13A-SSU U3
+U 1 1 604F4615
+P 9050 3600
+F 0 "U3" V 8475 3600 50  0000 C CNN
+F 1 "ATtiny85" V 8384 3600 50  0000 C CNN
+F 2 "Package_SO:SOIC-8_5.275x5.275mm_P1.27mm" H 9050 3600 50  0001 C CIN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/doc8126.pdf" H 9050 3600 50  0001 C CNN
+	1    9050 3600
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR013
+U 1 1 60A0DF2C
+P 4800 4400
+F 0 "#PWR013" H 4800 4150 50  0001 C CNN
+F 1 "GND" H 4805 4227 50  0000 C CNN
+F 2 "" H 4800 4400 50  0001 C CNN
+F 3 "" H 4800 4400 50  0001 C CNN
+	1    4800 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Transistor_FET:IRLML0030 Q1
+U 1 1 61BDECD2
+P 5000 4300
+F 0 "Q1" H 5204 4346 50  0000 L CNN
+F 1 "IRLML0030" H 5204 4255 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5200 4225 50  0001 L CIN
+F 3 "https://www.infineon.com/dgdl/irlml0030pbf.pdf?fileId=5546d462533600a401535664773825df" H 5000 4300 50  0001 L CNN
+	1    5000 4300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4250 3100 5000 3100
+Wire Wire Line
+	5600 4000 6300 4000
+Wire Wire Line
+	6300 4000 6900 4000
+Connection ~ 6300 4000
+Wire Wire Line
+	6300 4000 6300 4400
+Wire Wire Line
+	7950 2450 7950 4400
+Wire Wire Line
+	7950 4400 6300 4400
+Wire Wire Line
+	9750 4400 7950 4400
+Wire Wire Line
+	9750 3600 9750 4400
+$Comp
+L LED:SK6812 D1
+U 1 1 604F2786
+P 10400 3900
+F 0 "D1" H 10744 3946 50  0000 L CNN
+F 1 "SK6812" H 10744 3855 50  0000 L CNN
+F 2 "LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm" H 10450 3600 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf" H 10500 3525 50  0001 L TNN
+	1    10400 3900
+	1    0    0    -1  
+$EndComp
+NoConn ~ 10700 3900
+Text Label 10100 3650 0    50   ~ 0
+Din_LED
+$Comp
+L Device:C C_led1
+U 1 1 60A4741C
+P 10550 3500
+F 0 "C_led1" H 10665 3546 50  0000 L CNN
+F 1 "100nF" H 10665 3455 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 10588 3350 50  0001 C CNN
+F 3 "~" H 10550 3500 50  0001 C CNN
+	1    10550 3500
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	10400 3600 10400 3500
+Connection ~ 10400 3500
+Wire Wire Line
+	10700 3500 10950 3500
+Wire Wire Line
+	10100 3900 10100 2900
+Wire Wire Line
+	10400 4200 10400 4400
+Wire Wire Line
+	10400 4400 9750 4400
+Wire Wire Line
+	10400 4400 10950 4400
+Wire Wire Line
+	10950 3500 10950 4400
+Connection ~ 10400 4400
+Connection ~ 9750 4400
+Wire Wire Line
+	10400 2800 10400 3500
+Connection ~ 7950 4400
+Connection ~ 6300 4400
+Wire Wire Line
+	5200 4400 6300 4400
+Wire Wire Line
+	5000 4100 5000 3100
+Text Label 5550 4400 0    50   ~ 0
+FAKE_GND
+Wire Wire Line
+	9050 1150 9050 1800
+Wire Wire Line
+	9050 1800 10950 1800
+Wire Wire Line
+	10950 1800 10950 3500
+Connection ~ 10950 3500
 $EndSCHEMATC
