@@ -1,19 +1,15 @@
 # Omamori
 ![Omamori Pixelart](general/Images/Omamori.png)
 \
-Omamori is a solar-powered LED lucky and protector charm.
-I have got the motivation to realize this project during my time in university, when I first designed PCBs, even though I had the idea for much longer.
-At first, I was using Altium Designer, which was used by my university. Later since version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas.
-A huge thank you for helping me with soldering, designing, listening and keeping my motivation up to: \
-Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3
-<br>
+Omamori is a solar-powered LED lucky and protector charm.<br>
+I have got the motivation to realize this project during my time in university, when I first designed PCBs, even though I had the idea for much longer. At first, I was using Altium Designer, which was used by my university. Later since version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas.<br>
+A huge thank you for helping me with soldering, designing, listening and keeping my motivation up to:<br>
+Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3<br>
 
 ## Programming
 
-Set internal clock to 8MHz -> Burn Bootloader and Flash Software
-Serial: 19200 BAUD
-
-Reset the MCU and send a command within the first 5 seconds (Blinks once when serial communication is enabled, and another time when it is disabled)
+Set internal clock to 8MHz -> Burn Bootloader and Flash Software<br>
+Serial: 19200 BAUD<br>Reset the MCU and send a command within the first 5 seconds (Blinks once when serial communication is enabled, and another time when it is disabled)
 
 ### Serial Protocol and commands:
 
