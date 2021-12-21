@@ -711,7 +711,7 @@ F 3 "https://www.infineon.com/dgdl/irlml0030pbf.pdf?fileId=5546d462533600a401535
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	4250 3100 5000 3100
+	4250 3100 4700 3100
 Wire Wire Line
 	5600 4000 6300 4000
 Wire Wire Line
@@ -786,4 +786,31 @@ Wire Wire Line
 Wire Wire Line
 	10950 1800 10950 3500
 Connection ~ 10950 3500
+$Comp
+L Device:R R_pulldown1
+U 1 1 61C260A2
+P 4700 3300
+F 0 "R_pulldown1" H 4770 3346 50  0000 L CNN
+F 1 "10M" H 4770 3255 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric_Pad1.05x0.95mm_HandSolder" V 4630 3300 50  0001 C CNN
+F 3 "~" H 4700 3300 50  0001 C CNN
+	1    4700 3300
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR0102
+U 1 1 61C28559
+P 4700 3450
+F 0 "#PWR0102" H 4700 3200 50  0001 C CNN
+F 1 "GND" H 4705 3277 50  0000 C CNN
+F 2 "" H 4700 3450 50  0001 C CNN
+F 3 "" H 4700 3450 50  0001 C CNN
+	1    4700 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4700 3150 4700 3100
+Connection ~ 4700 3100
+Wire Wire Line
+	4700 3100 5000 3100
 $EndSCHEMATC
