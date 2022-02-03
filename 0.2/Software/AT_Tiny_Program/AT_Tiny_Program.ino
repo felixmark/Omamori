@@ -4,6 +4,13 @@
     Author: Felix Mark
     Date:   23.05.2021
 
+         AT TINY PINOUT
+             ______
+       RST -|O     |- VCC
+    LED EN -|      |- MEASURE 
+       LED -|      |- RX
+       GND -|______|- TX
+    
     Serial Protocol:
     <cmd>:<values (if needed)>;
     
@@ -35,6 +42,7 @@
 #define NUM_ELEMENTS        105
 #define SERIAL_TIMEFRAME    5000
 #define SERIAL_BUFFER_SIZE  30
+#define ISR_CNT_TO_WAKE_UP  2
 
 // Pins
 #define PIN_LED             PCINT4
@@ -72,7 +80,8 @@ SoftwareSerial mySerial(PIN_RX, PIN_TX);
 
 volatile bool awake = false;
 uint8_t current_sleep_cycles = 1; // Between 1 and 10 cycles = 8 to 80 seconds sleep
-uint8_t sleep_cycle_counter = 1;
+int8_t sleep_cycle_counter = 1;
+uint8_t isr_cnt = 0;              // Short blink every 8 * isr_cnt seconds
 int soc = 0;
 uint8_t serial_process_position = 0;
 
@@ -143,7 +152,7 @@ void loop() {
         // Measure state of charge
         read_soc();
       
-        if (sleep_cycle_counter == 0) {
+        if (sleep_cycle_counter <= 0) {
             // After some sleep cycles
 
             enable_led();
@@ -172,11 +181,11 @@ void loop() {
             disable_led();
           
             // Determine next sleep duration and set sleep_cycle_counter
-            current_sleep_cycles = map(soc, 0, 1023, 15, 1);
+            current_sleep_cycles = map(soc, 0, 1023, 10, 1);
             sleep_cycle_counter = current_sleep_cycles;
         } else {
+            // Short blink every 8 seconds
             if (mode == MODE_DEFAULT) {
-                // Short blink every 8 seconds
                 blink_led(
                     offsets[POS_RED] + (color_r * MAXIMUM_BRIGHTNESS / 4) / 254,
                     offsets[POS_GRN] + (color_g * MAXIMUM_BRIGHTNESS / 4) / 254,
@@ -208,7 +217,7 @@ void handle_serial() {
     char recv_buffer[SERIAL_BUFFER_SIZE] = {};
     char character = 0;
 
-    // Send current color
+    // Send current color for synchronizing Omamoris
     mySerial.println("Omamori v" VERSION);
     print_current_color();
 
@@ -225,13 +234,14 @@ void handle_serial() {
                 delay(5);
             }
 
-            blink_led(0,0,50,0);
+            blink_led(0,50,0,0);
             delay(10);
             
             mySerial.print("Received: ");
             for (uint8_t i = 0; i < pos; ++i) {
                 mySerial.print(recv_buffer[i]);
             }
+            mySerial.println();
 
             if (recv_buffer[0] == 'C' && recv_buffer[1] == 'O' && recv_buffer[2] == 'L') {
                 serial_process_position = 4;
@@ -240,9 +250,7 @@ void handle_serial() {
                 color_g = get_value(recv_buffer, serial_process_position, ',');
                 color_b = get_value(recv_buffer, serial_process_position, ',');
                 color_w = get_value(recv_buffer, serial_process_position, ';');
-        
-                print_current_color();
-        
+
                 // Update data in EEPROM if necessary
                 update_eeprom(color_set_eeprom, 1);
                 update_eeprom(color_r_eeprom, color_r);
@@ -261,6 +269,7 @@ void handle_serial() {
                 mySerial.println("Mode: Default");
             }
             else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
+                mySerial.println("Omamori v" VERSION);
                 read_soc();
                 mySerial.print("SOC: ");
                 mySerial.println(soc);
@@ -287,7 +296,11 @@ void handle_serial() {
 
 // WDT ISR
 ISR(WDT_vect) {
-    awake = true;
+    isr_cnt += 1;
+    if (isr_cnt >= ISR_CNT_TO_WAKE_UP) {
+        awake = true;
+        isr_cnt = 0;
+    }
 }
 
 // ENTER SLEEP
