@@ -19,6 +19,7 @@
     COL:<red byte>,<green byte>,<blue byte>,<white byte>;   // Set Color
     BAT;                                                    // Set Mode to Battery display
     DEF;                                                    // Set Mode to Default
+    SLP:<1-100>;                                            // Set sleep time between blinks
 */
 
 
@@ -223,7 +224,7 @@ void handle_serial() {
     char character = 0;
 
     // Send current color for synchronizing Omamoris
-    mySerial.println("LUV");                // Used for pairing
+    mySerial.println("LUV;");                // Used for pairing
 
     // Wait for incomming serial bytes
     while (millis() < SERIAL_TIMEFRAME) {   // While serial communication is enabled
@@ -241,7 +242,7 @@ void handle_serial() {
             blink_led(0,0,0,30);
             delay(10);
             
-            mySerial.print("ACK: ");
+            mySerial.print("ACK:");
             for (uint8_t i = 0; i < pos; ++i) {
                 mySerial.print(recv_buffer[i]);
             }
@@ -288,35 +289,34 @@ void handle_serial() {
             
             // STA command for getting status
             else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'T' && recv_buffer[2] == 'A') {
-                mySerial.println("Omamori v" VERSION);
                 read_soc();
-                mySerial.print("SOC: ");
+                mySerial.println("VER:" VERSION);
+                mySerial.print("SOC:");
                 mySerial.println(soc);
-                mySerial.print("MODE: ");
+                mySerial.print("MOD:");
                 if (mode == MODE_DEFAULT) {
                     mySerial.println("DEF");
                 }
                 if (mode == MODE_BATTERY) {
                     mySerial.println("BAT");
                 }
-                mySerial.print("SLEEP: ");
+                mySerial.print("SLP:");
                 mySerial.print(isr_cnt_to_wake_up * 8);
                 mySerial.println("s");
                 print_current_color();
-                mySerial.print("MODE: ");
             }
             
             // SLP command for setting sleep time (value x 8s)
             else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'L' && recv_buffer[2] == 'P') {
                 serial_process_position = 4;
                 uint8_t tmp_isr_cnt_to_wake_up = get_value(recv_buffer, serial_process_position, ';');
-                if (tmp_isr_cnt_to_wake_up >= 1 && tmp_isr_cnt_to_wake_up <= 10) {
+                if (tmp_isr_cnt_to_wake_up >= 1 && tmp_isr_cnt_to_wake_up <= 100) {
                     isr_cnt_to_wake_up = tmp_isr_cnt_to_wake_up;
                     update_eeprom(isr_cnt_to_wake_up_eeprom, isr_cnt_to_wake_up);
                     print_okay();
                 }
                 else {
-                  print_error();
+                    print_error();
                 }
             }
 

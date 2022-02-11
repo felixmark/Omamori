@@ -14,6 +14,7 @@ import serial.tools.list_ports
 
 
 def execute_command(param_dict:dict) -> str:
+    param_dict["serial_connection"].flushInput()
     print("Please reset your Omamori, command will be executed in 3 seconds...")
     sleep(3)
     print("Execution!")
@@ -26,7 +27,7 @@ def execute_command(param_dict:dict) -> str:
     response = param_dict["serial_connection"].read(100).decode()
     if response is None or response == "":
         response = "NO RESPONSE FROM SERIAL DEVICE!"
-    print("RX:\n" + response)
+    print("\nRX:\n" + response, end="")
     print("-"*80)
 
 
@@ -42,6 +43,12 @@ def set_color(param_dict:dict) -> None:
     blu = input("Blue  value (0-255): ")
     wht = input("White value (0-255): ")
     execute_command({"serial_connection": param_dict["serial_connection"], "command": "COL", "parameters": [red, grn, blu, wht]})
+
+
+def set_sleep_time(param_dict:dict) -> None:
+    sleep_time = input("Sleep time (value between 1 and 100, which gets multiplied by 8s): ")
+    print("Sleep time will be set to " + str(int(sleep_time) * 8) + " seconds!")
+    execute_command({"serial_connection": param_dict["serial_connection"], "command": "SLP", "parameters": [sleep_time]})
 
 
 def main() -> None:
@@ -80,7 +87,7 @@ def main() -> None:
                     "parameters": {
                         "serial_connection": serial_connection
                     }
-                }, 
+                },
                 {
                     "title": "Set default (color) mode", 
                     "function": execute_command, 
@@ -88,7 +95,7 @@ def main() -> None:
                         "serial_connection": serial_connection, 
                         "command": "DEF"
                     }
-                }, 
+                },
                 {
                     "title": "Set battery display mode", 
                     "function": execute_command, 
@@ -96,7 +103,7 @@ def main() -> None:
                         "serial_connection": serial_connection, 
                         "command": "BAT"
                     }
-                }, 
+                },
                 {
                     "title": "Get status", 
                     "function": execute_command, 
@@ -104,7 +111,14 @@ def main() -> None:
                         "serial_connection": serial_connection, 
                         "command": "STA"
                     }
-                }, 
+                },
+                {
+                    "title": "Set sleep time between blinks", 
+                    "function": set_sleep_time, 
+                    "parameters": {
+                        "serial_connection": serial_connection
+                    }
+                },
                 {
                     "title": "Send own command", 
                     "function": send_own_command, 
