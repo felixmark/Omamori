@@ -71,9 +71,9 @@ def main() -> None:
     
     # Try to establish serial communication on selected device
     try:
-        serial_connection = serial.Serial(str(selected_serial_port.name), 19200, timeout=1)
+        serial_connection = serial.Serial(str(selected_serial_port.device), 19200, timeout=1)
         print()
-        print("Serial port opened: " + str(serial_connection.name))
+        print("Serial port opened: " + str(selected_serial_port.device))
         
         input_text = None
         while input_text != "q":
@@ -146,8 +146,9 @@ def main() -> None:
                     print("Selection invalid.")
 
         serial_connection.close()
-    except serial.SerialException:
+    except serial.SerialException as e:
         print("Serial connection already opened.")
+        print(e)
         exit(1)
 
 if __name__ == '__main__':
