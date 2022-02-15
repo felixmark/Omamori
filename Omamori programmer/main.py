@@ -62,16 +62,20 @@ def set_sleep_time(serial_connection:object) -> None:
 
 def user_select_serial_port() -> object:
     serial_ports = list(serial.tools.list_ports.comports())
-    for idx, serial_port in enumerate(serial_ports):
-        print("[" + str(idx) + "] " + str(serial_port))
-    print()
-    selected_device = input("Select the device your Omamori is connected to: ")
-    try:
-        selected_device_int = int(selected_device)
-        return serial_ports[selected_device_int] 
-    except (ValueError, IndexError):
-        print("Selection invalid.")
-        exit(1)
+    if serial_ports is not None and len(serial_ports) > 0:
+        for idx, serial_port in enumerate(serial_ports):
+            print("[" + str(idx) + "] " + str(serial_port))
+        print()
+        selected_device = input("Select the device your Omamori is connected to: ")
+        try:
+            selected_device_int = int(selected_device)
+            return serial_ports[selected_device_int] 
+        except (ValueError, IndexError):
+            print("Selection invalid.")
+            exit(1)
+    else:
+            print("No serial devices found.")
+            exit(1)
 
 
 def print_main_menu(menu_points:list) -> None:
@@ -89,8 +93,8 @@ def print_new_page() -> None:
   / __ \                          _      
  / /  \ \_ __  __ _ _ __  ___ _ _(_)  _ __ _ _ ___  __ _ _ _ __ _ _ __  _ __  ___ _ _ 
  \ \__/ / '  \/ _` | '  \/ _ \ '_| | | '_ \ '_/ _ \/ _` | '_/ _` | '  \| '  \/ -_) '_|
-  \____/|_|_|_\__,_|_|_|_\___/_| |_| | .__/_| \___/\__, |_| \__,_|_|_|_|_|_|_\___|_|                         
-                                     |_|           |___/      
+  \____/|_|_|_\__,_|_|_|_\___/_| |_| | .__/_| \___/\__, |_| \__,_|_|_|_|_|_|_\___|_|  
+                                     |_|           |___/
         """
     )
 
