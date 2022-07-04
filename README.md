@@ -19,9 +19,6 @@ Serial: 19200 BAUD<br>Reset the MCU and send a command within the first 5 second
 
 List of commands:
 STA;                                                    // Get Status
-COL:<red byte>,<green byte>,<blue byte>,<white byte>;   // Set Color
-BAT;                                                    // Set Mode to Battery display
-DEF;                                                    // Set Mode to Default
 SLP:<1-100>;                                            // Set sleep time between blinks
 ```
 

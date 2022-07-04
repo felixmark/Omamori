@@ -47,7 +47,7 @@
 #define SERIAL_BAUD         19200
 #define NUM_SIGMOID_VALUES  105
 #define EEPROM_BUFFER_SIZE  81
-#define BLINK_ON_DURATION   20                   // ms
+#define BLINK_ON_DURATION   20                  // ms
 #define ANIMATION_DELAY     5                   // ms
 #define ON_TIME_DELAY       50                  // ms
 #define SERIAL_TIMEFRAME    5000                // ms
@@ -88,11 +88,9 @@ uint8_t serial_process_position = 0;  // How much of the received serial string 
 
 // ============================================================= EEPROM
 char eeprom_buffer[EEPROM_BUFFER_SIZE] = {};
-// Own message
+// Own message and name
 uint8_t EEMEM message_eeprom[80];
-
-// Own name
-uint8_t EEMEM own_name_eeprom[14];
+uint8_t EEMEM name_eeprom[14];
 
 // Friends
 uint8_t friend_count = 0;
@@ -225,10 +223,10 @@ void handle_serial() {
 
             // Check received command
 
-            // INF command for getting status
+            // INF command for getting information
             if (recv_buffer[0] == 'I' && recv_buffer[1] == 'N' && recv_buffer[2] == 'F') {
                 mySerial.print("NAM:");
-                eeprom_read_block(eeprom_buffer, own_name_eeprom, sizeof(own_name_eeprom));
+                eeprom_read_block(eeprom_buffer, name_eeprom, sizeof(name_eeprom));
                 mySerial.println(eeprom_buffer);
                 clear_eeprom_buffer();
                 mySerial.print("MSG:");
@@ -249,17 +247,33 @@ void handle_serial() {
             else if (recv_buffer[0] == 'V' && recv_buffer[1] == 'E' && recv_buffer[2] == 'R') {
                 mySerial.println("VER:" VERSION);
             }
+            
+            // SET name of owner of Omamori
+            else if (recv_buffer[0] == 'N' && recv_buffer[1] == 'A' && recv_buffer[2] == 'M') {
+                remove_command_from_array(recv_buffer);
+                eeprom_write_block(recv_buffer, name_eeprom, sizeof(message_eeprom));
+            }
 
             // SET message of Omamori
             else if (recv_buffer[0] == 'M' && recv_buffer[1] == 'S' && recv_buffer[2] == 'G') {
-                mySerial.println("own msg");
-                
-                //eeprom_write_block(globale_variable, globale_variable_eeprom, sizeof(globale_variable_eeprom));
+                remove_command_from_array(recv_buffer);
+                eeprom_write_block(recv_buffer, message_eeprom, sizeof(message_eeprom));
+            }
+            
+            // Add a friend to the list
+            else if (recv_buffer[0] == 'A' && recv_buffer[1] == 'D' && recv_buffer[2] == 'D') {
+                uint8_t num_friends = eeprom_read_byte(friend_count_eeprom);
+                remove_command_from_array(recv_buffer);
+                eeprom_write_block(recv_buffer, friend_list_eeprom[num_friends], sizeof(friend_list_eeprom[num_friends]));
+                num_friends += 1;
+                update_eeprom(friend_count_eeprom, num_friends);
             }
             
             // GET command for pairing
             else if (recv_buffer[0] == 'G' && recv_buffer[1] == 'E' && recv_buffer[2] == 'T') {
-                mySerial.println("own msg");
+                eeprom_read_block(eeprom_buffer, name_eeprom, sizeof(name_eeprom));
+                mySerial.println(eeprom_buffer);
+                clear_eeprom_buffer();
             }
 
             // Unknown command was received
@@ -356,5 +370,15 @@ void update_eeprom(uint8_t &variable, uint8_t value) {
     // Only write to eeprom if value is not already set (so writing is not performed that often)
     if (eeprom_read_byte(&variable) != value) {
         eeprom_write_byte(&variable, value);
+    }
+}
+
+void remove_command_from_array(char recv_buffer[]) {
+    for (uint8_t i = 0; i < SERIAL_BUFFER_SIZE; ++i) {
+        if (i < SERIAL_BUFFER_SIZE - 5) {
+            recv_buffer[i] = recv_buffer[i+4];
+        } else {
+            recv_buffer[i] = 0;
+        }
     }
 }

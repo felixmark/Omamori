@@ -393,7 +393,7 @@ void read_soc() {
 void blink_led(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
     enable_led();
     show_color(red, green, blue, white);
-    delay(BLINK_ON_TIME);
+    delay(BLINK_ON_DURATION);
     disable_led();
 }
 

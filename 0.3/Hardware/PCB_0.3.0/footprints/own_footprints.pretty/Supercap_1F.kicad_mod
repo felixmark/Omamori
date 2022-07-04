@@ -14,4 +14,9 @@
   (fp_arc (start 9.5 1.5) (mid 0 9.617692) (end -9.5 1.5) (layer "F.SilkS") (width 0.12) (tstamp c282e1d4-f1d5-4164-9beb-77c34e129529))
   (pad "1" thru_hole circle (at -9.5 0) (size 2.5 2.5) (drill 1.5) (layers *.Cu "F.Mask") (tstamp 434b947c-2ead-4370-8068-a24a82f3e4b4))
   (pad "2" thru_hole circle (at 9.5 0) (size 2.5 2.5) (drill 1.5) (layers *.Cu "F.Mask") (tstamp 589ee163-54f4-48c9-9a5c-bb5c241d68f5))
+  (model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Radial_D10.0mm_H12.5mm_P5.00mm.step"
+    (offset (xyz -5 0 0))
+    (scale (xyz 2 2 0.4))
+    (rotate (xyz 0 0 0))
+  )
 )
