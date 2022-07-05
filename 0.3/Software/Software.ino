@@ -60,6 +60,7 @@
 #define PIN_LED1            PCINT0
 #define PIN_LED2            PCINT1
 #define PIN_LED3            PCINT4
+#define PIN_MEASUREMENT     PCINT5
 
 
 
@@ -80,7 +81,6 @@ SoftwareSerial mySerial(PIN_RX, PIN_TX);
 volatile bool awake = false;          // Used for waking up in ISR (Interrupt Service Routine)
 int8_t sleep_cycle_counter = 0;       // Counting how often uC woke up and blinked shortly
 uint8_t isr_cnt = 0;                  // Short blink every 8 * isr_cnt seconds
-uint8_t isr_cnt_to_wake_up = 1;       // How many interrupts needed to wake up (isr_cnt_to_wake_up * 8s)
 int soc = 0;                          // Store SOC measurement (State of charge)
 uint8_t serial_process_position = 0;  // How much of the received serial string has been processed
 
@@ -102,6 +102,7 @@ uint8_t EEMEM friend_list_eeprom[11][14];
 // ============================================================= SETUP 
 void setup() {
     // Setup Pins
+    pinMode(PIN_MEASUREMENT, INPUT);
     pinMode(PIN_LED1, OUTPUT);
     pinMode(PIN_LED2, OUTPUT);
     pinMode(PIN_LED3, OUTPUT);
@@ -112,7 +113,7 @@ void setup() {
     wdt_reset();                    // Reset Watchdog Timer
     MCUSR &= ~(1 << WDRF);          // Disable Watchdog System Reset
     WDTCR = (1 << WDCE);            // Watchdog Change Enable
-    WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds
+    WDTCR |= (1<<WDP3) | (0<<WDP2) | (0<<WDP1) | (0<<WDP0); // WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds
     WDTCR |= (1 << WDIE);           // Watchdog Timeout Interrupt Enable
     sei();                          // Enable Interrupts
 
@@ -175,8 +176,15 @@ void loop() {
             // Set sleep_cycle_counter
             sleep_cycle_counter = NUM_SHORT_BLINKS_BEFORE_LONG_BLINK;
         } else {
-            // Short blink middle LED every 8 seconds
-            blink_led(2);
+            // Short blink an LED every 8 seconds
+            read_soc();
+            if (soc <= 341) {
+                blink_led(3);
+            } else if (soc <= 682) {
+                blink_led(2);
+            } else {
+                blink_led(1);
+            }
         }
     }
     go_to_bed();
@@ -247,6 +255,12 @@ void handle_serial() {
             else if (recv_buffer[0] == 'V' && recv_buffer[1] == 'E' && recv_buffer[2] == 'R') {
                 mySerial.println("VER:" VERSION);
             }
+
+            // GET SOC of Omamori
+            else if (recv_buffer[0] == 'S' && recv_buffer[1] == 'O' && recv_buffer[2] == 'C') {
+                mySerial.print("SOC:");
+                mySerial.println(soc);
+            }
             
             // SET name of owner of Omamori
             else if (recv_buffer[0] == 'N' && recv_buffer[1] == 'A' && recv_buffer[2] == 'M') {
@@ -295,12 +309,8 @@ void handle_serial() {
 
 // WDT ISR
 ISR(WDT_vect) {
-    // Increase isr_cnt and wake up, when necessary
-    isr_cnt += 1;
-    if (isr_cnt >= isr_cnt_to_wake_up) {
-        awake = true;
-        isr_cnt = 0;
-    }
+    // Wake up
+    awake = true;
 }
 
 // ENTER SLEEP
@@ -381,4 +391,9 @@ void remove_command_from_array(char recv_buffer[]) {
             recv_buffer[i] = 0;
         }
     }
+}
+
+// GET SOC
+void read_soc() {
+    soc = analogRead(PIN_MEASUREMENT);    // Write analog value from ADC to soc variable (0-1023)
 }
