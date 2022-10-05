@@ -103,10 +103,10 @@ def main() -> None:
     """Main function for serial communication with Omamori."""
 
     main_functions = [
+        { "title": "Get Info", "function": lambda serial_connection : execute_command(serial_connection, "INF") },
         { "title": "Set Color", "function": lambda serial_connection : set_color(serial_connection) },
         { "title": "Set default (color) mode", "function": lambda serial_connection : execute_command(serial_connection, "DEF") },
         { "title": "Set battery display mode", "function": lambda serial_connection : execute_command(serial_connection, "BAT") },
-        { "title": "Get status", "function": lambda serial_connection : execute_command(serial_connection, "STA") },
         { "title": "Set sleep time between blinks", "function": lambda serial_connection : set_sleep_time(serial_connection) },
         { "title": "Send own command", "function": lambda serial_connection : send_own_command(serial_connection) }
     ]
@@ -117,7 +117,7 @@ def main() -> None:
     
     # Try to establish serial communication on selected device
     try:
-        serial_connection = serial.Serial(str(selected_serial_port.device), 19200, timeout=1)
+        serial_connection = serial.Serial(str(selected_serial_port.device), 9600, timeout=1)
         input_text = None
         while input_text != "q":
             
@@ -135,9 +135,10 @@ def main() -> None:
                     selected_function(serial_connection)
                 else:
                     print("Function not implemented yet.")
-            except (ValueError, IndexError):
+            except (ValueError, IndexError) as e:
                 if input_text != "q":
                     print("Selection invalid.")
+                    print(e)
                 else:
                     continue
 

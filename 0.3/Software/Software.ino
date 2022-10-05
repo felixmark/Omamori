@@ -5,14 +5,14 @@
     Date:   23.05.2021
 
     Instructions:
-    Set internal clock to 8MHz -> Burn bootloader and flash software
+    Set internal clock to 1MHz -> Burn bootloader and flash software
 
-    ATTiny 85 Pinout:
+    ATTiny 85 V Pinout:
              ________
-       RST -|O       |- VCC (1.8V)
-        RX -|        |- TX 
-      LED3 -|        |- LED2
-       GND -|________|- LED1
+ <A0>  RST -|O       |- VCC (1.8V)
+  <3>   RX -|        |- TX   <2>
+  <4> LED3 -|        |- LED2 <1>
+       GND -|________|- LED1 <0>
     
     List of serial commands:
     VER                     // Get version of the Omamori
@@ -55,10 +55,10 @@
 #define NUM_SHORT_BLINKS_BEFORE_LONG_BLINK  10  // times 8 seconds
 
 // Pins
-#define PIN_TX              PCINT2
-#define PIN_RX              PCINT3
 #define PIN_LED1            PCINT0
 #define PIN_LED2            PCINT1
+#define PIN_RX              PCINT2
+#define PIN_TX              PCINT3
 #define PIN_LED3            PCINT4
 #define PIN_MEASUREMENT     PCINT5
 
@@ -79,7 +79,7 @@ static uint8_t SIGMOID [NUM_SIGMOID_VALUES] = {
 SoftwareSerial mySerial(PIN_RX, PIN_TX);
 
 volatile bool awake = false;          // Used for waking up in ISR (Interrupt Service Routine)
-int8_t sleep_cycle_counter = 0;       // Counting how often uC woke up and blinked shortly
+int8_t sleep_cycle_counter = 1;       // Counting how often uC woke up and blinked shortly
 uint8_t isr_cnt = 0;                  // Short blink every 8 * isr_cnt seconds
 int soc = 0;                          // Store SOC measurement (State of charge)
 uint8_t serial_process_position = 0;  // How much of the received serial string has been processed
@@ -101,24 +101,26 @@ uint8_t EEMEM friend_list_eeprom[11][14];
 
 // ============================================================= SETUP 
 void setup() {
+  
     // Setup Pins
-    pinMode(PIN_MEASUREMENT, INPUT);
     pinMode(PIN_LED1, OUTPUT);
     pinMode(PIN_LED2, OUTPUT);
     pinMode(PIN_LED3, OUTPUT);
-    set_leds_digital(LOW, LOW, LOW);
+    pinMode(PIN_MEASUREMENT, INPUT);
 
     // Setup WDT
     cli();                          // Disable Interrupts
     wdt_reset();                    // Reset Watchdog Timer
     MCUSR &= ~(1 << WDRF);          // Disable Watchdog System Reset
     WDTCR = (1 << WDCE);            // Watchdog Change Enable
-    WDTCR |= (1<<WDP3) | (0<<WDP2) | (0<<WDP1) | (0<<WDP0); // WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds
+    WDTCR |= 1 << WDP0 | 1 << WDP3; // Set WDT timeout to 8 seconds 4 would be: (1<<WDP3) | (0<<WDP2) | (0<<WDP1) | (0<<WDP0);
     WDTCR |= (1 << WDIE);           // Watchdog Timeout Interrupt Enable
     sei();                          // Enable Interrupts
-
+    
     // Handle Serial communication
+    blink_led(1);
     handle_serial();
+    blink_led(3);
 }
 
 
@@ -195,13 +197,12 @@ void loop() {
 
 // ============================================================= SERIAL COMMUNICATION
 void handle_serial() {
-    blink_led(1);
-    mySerial.begin(SERIAL_BAUD);
     
     char recv_buffer[SERIAL_BUFFER_SIZE] = {};
     char character = 0;
 
-    // Send current color for synchronizing Omamoris
+    // Send GET for synchronizing Omamoris
+    mySerial.begin(SERIAL_BAUD);
     mySerial.println("GET");                // Used for pairing
 
     // Wait for incomming serial bytes
@@ -296,12 +297,10 @@ void handle_serial() {
             }
 
             // End receiving
-            set_leds_digital(LOW, LOW, LOW);
             break;
         }
     }
     
-    blink_led(3);
     mySerial.end();
 }
 

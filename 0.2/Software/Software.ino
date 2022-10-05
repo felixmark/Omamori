@@ -36,7 +36,7 @@
 
 // ============================================================= DEFINES
 #define VERSION             "1.0"
-#define SERIAL_BAUD         19200
+#define SERIAL_BAUD         19200 // Corresponds to 2400 BAUD at 8 MHz
 #define MAXIMUM_BRIGHTNESS  70
 #define BLINK_ON_TIME       10
 #define ANIMATION_DELAY     15
@@ -393,7 +393,7 @@ void read_soc() {
 void blink_led(uint8_t red, uint8_t green, uint8_t blue, uint8_t white) {
     enable_led();
     show_color(red, green, blue, white);
-    delay(BLINK_ON_DURATION);
+    delay(BLINK_ON_TIME);
     disable_led();
 }
 
