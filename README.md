@@ -9,18 +9,7 @@ Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3<br>
 
 ## Programming
 
-Set internal clock to 8MHz -> Burn Bootloader and Flash Software<br>
-Serial: 19200 BAUD<br>Reset the MCU and send a command within the first 5 seconds (Blinks once when serial communication is enabled, and another time when it is disabled)
-
-### Serial Protocol and commands:
-
-```
-<cmd>:<values (if needed)>;
-
-List of commands:
-STA;                                                    // Get Status
-SLP:<1-100>;                                            // Set sleep time between blinks
-```
+Program ATTiny 1626 via UPDI pins on the back of the PCB.
 
 <br><br>
 
@@ -38,21 +27,10 @@ A version History of the Omamori project.
 
 ![PCB v3.0](./0.3/Images/PCB_Design.png)
 \
-**MCU:** 1x ATTiny 85 \
+**MCU:** 1x ATTiny 1626 \
 **Energy Harvester:** 1x BQ25570 \
 **Solar Cells:** 2x KXOB25-05X3F \
-**LEDS:** 3x Orange 1210 SMD LED
-
-### Energy Harvester (BQ25504) properties
-
-```
-V_REF_SAMP    = 80% of PV OCV = MPP (Default)
-V_BAT_UV      = 1.95V (Deafult)
-V_BAT_OK      = 2V (R_OK1 = 6.2 MOhm, R_OK2 = 4.3 MOhm, R_OK3 = 2.4 MOhm)
-V_BAT_OK_HYST = 2.5V
-V_BAT_OV      = 5.5V (R_OV1 = 4.3MOhm, R_OV2 = 8.6MOhm)
-V_OUT         = 1.8V (R_OUT1 = 8.2MOhm, R_OUT2 = 4.3MOhm)
-```
+**LEDS:** 3x Orange 0805 SMD LED
 
 <br><br>
 
