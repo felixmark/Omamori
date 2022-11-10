@@ -9,7 +9,8 @@ Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3<br>
 
 ## Programming
 
-Program ATTiny 1626 via UPDI pins on the back of the PCB.
+Program ATTiny 1626 via UPDI pins on the back of the PCB.  
+Set the internal clock to 1MHz and use a low uploading BAUD to make sure the microcontroller can keep up.  
 
 <br><br>
 
