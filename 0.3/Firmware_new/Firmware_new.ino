@@ -17,22 +17,23 @@
 // ==========================================================================================================================
 // Defines
 // ==========================================================================================================================
-#define PIN_SUPERCAP_MEASUREMENT PIN_A1 // MEASURE SUPERCAP
-#define PIN_BUTTON PIN_A2               // BUTTON
-#define PIN_LED1 PIN_A3                 // TOP LED
-#define PIN_LED2 PIN_A4                 // MID LED
-#define PIN_LED3 PIN_A5                 // BOT LED
+#define PIN_SUPERCAP_MEASUREMENT  PIN_A1  // MEASURE SUPERCAP
+#define PIN_BUTTON                PIN_A2  // BUTTON
+#define PIN_LED1                  PIN_A3  // TOP LED
+#define PIN_LED2                  PIN_A4  // MID LED
+#define PIN_LED3                  PIN_A5  // BOT LED
 
-#define NUM_SIGMOID_VALUES 105 // amount
-#define BLINK_ON_DURATION 20   // ms
-#define ANIMATION_DELAY 5      // ms
-#define SLEEP_SECONDS 6        // s
-#define NUM_SLP_CYCLES 10      // times SLEEP_SECONDS seconds
+#define NUM_SIGMOID_VALUES  105 // amount
+#define BLINK_ON_DURATION   20  // ms
+#define ANIMATION_DELAY     5   // ms
+#define SLEEP_SECONDS       10  // s
+#define ANIMATION_OCCURS    10  // play animation every nth time
 
 // ==========================================================================================================================
 // Variables
 // ==========================================================================================================================
-int soc = 0;                    // Store SOC measurement (State of charge)
+int soc = 0;              // Store SOC measurement (State of charge)
+int no_animation_cnt = 0; // count wake-ups
 
 // ==========================================================================================================================
 // Constants
@@ -42,16 +43,22 @@ static uint8_t SIGMOID[NUM_SIGMOID_VALUES] = {
     42, 46, 50, 54, 58, 63, 68, 73, 79, 84, 90, 96, 102, 108, 115, 121, 128, 134, 140, 146, 153, 159, 165, 170, 176,
     181, 186, 191, 196, 200, 205, 208, 212, 216, 219, 222, 225, 227, 230, 232, 234, 236, 237, 239, 240, 242, 243, 244, 245, 246,
     247, 248, 248, 249, 249, 250, 250, 251, 251, 252, 252, 252, 252, 253, 253, 253, 253, 253, 254, 254, 254, 254, 254, 254, 255,
-    255, 255, 255, 255, 255};
+    255, 255, 255, 255, 255
+};
+
+
+// ==========================================================================================================================
+// Function declarations
+// ==========================================================================================================================
+void play_led_wave(uint8_t mode = 0);
+
 
 // ==========================================================================================================================
 // Setup
 // ==========================================================================================================================
-void setup()
-{
+void setup() {
     // Set all pins to low power mode
-    for (uint8_t pin = 0; pin < 8; pin++)
-    {
+    for (uint8_t pin = 0; pin < 8; pin++) {
         *((uint8_t *)&PORTA + 0x10 + pin) |= 1 << PORT_PULLUPEN_bp; // Enable all pullups on port A
         *((uint8_t *)&PORTB + 0x10 + pin) |= 1 << PORT_PULLUPEN_bp; // Enable all pullups on port B
         *((uint8_t *)&PORTC + 0x10 + pin) |= 1 << PORT_PULLUPEN_bp; // Enable all pullups on port C
@@ -81,38 +88,42 @@ void setup()
 // ==========================================================================================================================
 // Loop
 // ==========================================================================================================================
-void loop()
-{
+void loop() {
+    // On awakening
+    ADC0_CTRLA |= ADC_ENABLE_bm; // Turn on ADC
+    
+    read_soc();
+    if (no_animation_cnt + 1 >= ANIMATION_OCCURS) {
+      no_animation_cnt = 0;
+      if (soc <= 592) {
+        play_led_wave(0);
+      } else if (soc <= 810) {
+        play_led_wave(1);
+      } else {
+        play_led_wave(2);
+      }
+    } else {
+      no_animation_cnt += 1;
+      if (soc <= 592) {
+        blink_led_pretty(3);
+      } else if (soc <= 810) {
+        blink_led_pretty(2);
+      } else {
+        blink_led_pretty(1);
+      }
+    }
+
     // Go to sleep
     ADC0_CTRLA &= ~ADC_ENABLE_bm;       // Turn off ADC
     set_sleep_mode(SLEEP_MODE_STANDBY); // Set standby sleep mode
     sleep_enable();                     // Enable sleeping
     sleep_cpu();                        // Sleep until woken up by ISR
-
-    // On awakening
-    ADC0_CTRLA |= ADC_ENABLE_bm; // Turn on ADC
-
-    // SOC
-    read_soc();
-    if (soc <= 341)
-    {
-        play_led_wave(0);
-    }
-    else if (soc <= 682)
-    {
-        play_led_wave(1);
-    }
-    else
-    {
-        play_led_wave(2);
-    }
 }
 
 // ==========================================================================================================================
 // ISR (Interrupt Service Routine)
 // ==========================================================================================================================
-ISR(RTC_CNT_vect)
-{
+ISR(RTC_CNT_vect) {
     RTC.INTFLAGS = RTC_OVF_bm;
 }
 
@@ -121,49 +132,35 @@ ISR(RTC_CNT_vect)
 // ==========================================================================================================================
 
 // PLAY LED WAVE
-void play_led_wave(uint8_t mode = 0)
-{
+void play_led_wave(uint8_t mode = 0) {
     int delayed = 0, delayed2 = 0;
     int a = 0, b = 0, c = 0;
-    for (int i = 0; i < NUM_SIGMOID_VALUES * 2 + 140; i += 1)
-    {
+    for (int i = 0; i < NUM_SIGMOID_VALUES * 2 + 140; i += 1) {
         a = i;
         b = delayed;
         c = delayed2;
-        if (a >= NUM_SIGMOID_VALUES * 2 - 1)
-        {
+        if (a >= NUM_SIGMOID_VALUES * 2 - 1) {
             a = 0;
-        }
-        else if (a >= NUM_SIGMOID_VALUES)
-        {
+        } else if (a >= NUM_SIGMOID_VALUES) {
             a = NUM_SIGMOID_VALUES - 1 - (a % NUM_SIGMOID_VALUES);
         }
-        if (a < 0)
-        {
+        if (a < 0) {
             a = 0;
         }
-        if (b >= NUM_SIGMOID_VALUES * 2 - 1)
-        {
+        if (b >= NUM_SIGMOID_VALUES * 2 - 1) {
             b = 0;
-        }
-        else if (b >= NUM_SIGMOID_VALUES)
-        {
+        } else if (b >= NUM_SIGMOID_VALUES) {
             b = NUM_SIGMOID_VALUES - 1 - (b % NUM_SIGMOID_VALUES);
         }
-        if (b < 0)
-        {
+        if (b < 0) {
             b = 0;
         }
-        if (c >= NUM_SIGMOID_VALUES * 2 - 1)
-        {
+        if (c >= NUM_SIGMOID_VALUES * 2 - 1) {
             c = 0;
-        }
-        else if (c >= NUM_SIGMOID_VALUES)
-        {
+        } else if (c >= NUM_SIGMOID_VALUES) {
             c = NUM_SIGMOID_VALUES - 1 - (c % NUM_SIGMOID_VALUES);
         }
-        if (c < 0)
-        {
+        if (c < 0) {
             c = 0;
         }
         if (mode == 0) {        // Down
@@ -171,40 +168,35 @@ void play_led_wave(uint8_t mode = 0)
         } else if (mode == 1) { // Up
             set_leds_analog(SIGMOID[c], SIGMOID[b], SIGMOID[a]);
         } else {                // Center
-            set_leds_analog(SIGMOID[a]+SIGMOID[c], SIGMOID[b], SIGMOID[b]);
+            set_leds_analog(SIGMOID[b], SIGMOID[a]+SIGMOID[c], SIGMOID[b]);
         }
         delay(ANIMATION_DELAY);
 
-        if (i >= 70)
-        {
+        if (i >= 70) {
             delayed++;
         }
-        if (i >= 140)
-        {
+        if (i >= 140) {
             delayed2++;
         }
     }
 }
 
 // SET ANALOG STATE OF ALL 3 LEDS
-void set_leds_analog(int led1, int led2, int led3)
-{
+void set_leds_analog(int led1, int led2, int led3) {
     analogWrite(PIN_LED1, led1);
     analogWrite(PIN_LED2, led2);
     analogWrite(PIN_LED3, led3);
 }
 
 // SET DIGITAL STATE OF ALL 3 LEDS
-void set_leds_digital(int high_low1, int high_low2, int high_low3)
-{
+void set_leds_digital(int high_low1, int high_low2, int high_low3) {
     digitalWrite(PIN_LED1, high_low1);
     digitalWrite(PIN_LED2, high_low2);
     digitalWrite(PIN_LED3, high_low3);
 }
 
 // BLINK LED
-void blink_led(uint8_t which_one)
-{
+void blink_led(uint8_t which_one) {
     set_leds_digital(
         which_one == 1 || which_one == 0,
         which_one == 2 || which_one == 0,
@@ -213,8 +205,27 @@ void blink_led(uint8_t which_one)
     set_leds_digital(LOW, LOW, LOW);
 }
 
+// BLINK LED PRETTY
+void blink_led_pretty(uint8_t which_one) {
+    int a = 0;
+    for (int i = 0; i < NUM_SIGMOID_VALUES * 2; i += 1) {
+        a = i;
+        if (a >= NUM_SIGMOID_VALUES) {
+            a = NUM_SIGMOID_VALUES - 1 - (a % NUM_SIGMOID_VALUES);
+        }
+        
+        if (which_one == 1) {
+            set_leds_analog(SIGMOID[a], 0, 0);
+        } else if (which_one == 2) {
+            set_leds_analog(0, SIGMOID[a], 0);
+        } else if (which_one == 3) {
+            set_leds_analog(0, 0, SIGMOID[a]);
+        }
+        delay(ANIMATION_DELAY*2);
+    }
+}
+
 // GET SOC
-void read_soc()
-{
+void read_soc() {
     soc = analogRead(PIN_SUPERCAP_MEASUREMENT); // Write analog value from ADC to soc variable (0-1023)
 }
