@@ -1,10 +1,10 @@
 # Omamori
-![Omamori Pixelart](0.3/Images/PCB_Design.png)
+![PCB v3.1](./0.3/Images/Photo_front.jpg)
 \
 Omamori is a solar-powered LED lucky and protector charm.<br>
 I have got the motivation to realize this project during my time in university, when I first designed PCBs, even though I had the idea for much longer. At first, I was using Altium Designer, which was used by my university. Later since version 2.0 I switched to KiCad, which is a gem of software, which was recommended to me by Andreas.<br>
 A huge thank you for helping me with soldering, designing, listening and keeping my motivation up to:<br>
-Andreas, Markus, Anna-Lena, Flopsi, Stephan and many others! <3<br>
+Andreas, Markus, Patrick, Anna-Lena, Flopsi, Stephan and many others! ♥️<br>
 <br>
 
 ## Programming
@@ -18,10 +18,21 @@ Set the internal clock to 1MHz and use a low uploading BAUD to make sure the mic
 
 A version History of the Omamori project.
 
+[Version 0.3.1](#Version-030) \
 [Version 0.3.0](#Version-030) \
 [Version 0.2.1](#Version-021) \
 [Version 0.2.0](#Version-020) \
 [Version 0.1.0](#Version-010)
+<br><br>
+
+## Version 0.3.1
+
+![PCB v3.1](./0.3/Images/Photo_front.jpg)
+![PCB v3.1](./0.3/Images/Photo_back.jpg)
+\
+Hardware as in Version 0.3.0 except that a few capacitors are closer to the BQ25570 and I added a few other transistors for stability. Everything is working as expected.  
+I consider this the final version for now.  
+
 <br><br>
 
 ## Version 0.3.0
@@ -37,7 +48,7 @@ A version History of the Omamori project.
 
 ## Version 0.2.1
 
-![PCB v2.0](./0.2/Images/pcb_0.2.1.jpg)
+![PCB v2.1](./0.2/Images/pcb_0.2.1.jpg)
 \
 Hardware as in Version 0.2.0 except a few resistors instead of the diode for measuring battery voltage and an IRLML2502 N-Channel MOSFET for switching the 5V boost converter.
 This version works, but has a very short supercap lifetime. Therefore the next version has to be a lot more efficient.
