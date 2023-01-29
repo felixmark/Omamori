@@ -24,9 +24,9 @@
 #define PIN_LED3                  PIN_A5  // BOT LED
 
 #define NUM_SIGMOID_VALUES  105 // amount
-#define BLINK_ON_DURATION   20  // ms
+#define BLINK_DELAY         50  // ms
 #define ANIMATION_DELAY     5   // ms
-#define SLEEP_SECONDS       10  // s
+#define SLEEP_SECONDS       15  // s
 #define ANIMATION_OCCURS    10  // play animation every nth time
 
 // ==========================================================================================================================
@@ -34,6 +34,7 @@
 // ==========================================================================================================================
 int soc = 0;              // Store SOC measurement (State of charge)
 int no_animation_cnt = 0; // count wake-ups
+int operation_mode = 1;   // Track operation mode
 
 // ==========================================================================================================================
 // Constants
@@ -50,13 +51,16 @@ static uint8_t SIGMOID[NUM_SIGMOID_VALUES] = {
 // ==========================================================================================================================
 // Function declarations
 // ==========================================================================================================================
-void play_led_wave(uint8_t mode = 0);
+void play_led_wave(uint8_t mode);
 
 
 // ==========================================================================================================================
 // Setup
 // ==========================================================================================================================
 void setup() {
+    // Disable interrupts before changing them
+    cli();
+  
     // Set all pins to low power mode
     for (uint8_t pin = 0; pin < 8; pin++) {
         *((uint8_t *)&PORTA + 0x10 + pin) |= 1 << PORT_PULLUPEN_bp; // Enable all pullups on port A
@@ -91,25 +95,32 @@ void setup() {
 void loop() {
     // On awakening
     ADC0_CTRLA |= ADC_ENABLE_bm; // Turn on ADC
+    delay(10);
+
+    if (digitalRead(PIN_BUTTON) == LOW) {
+      operation_mode = (operation_mode + 1) % 3;
+      blink_led(operation_mode + 1);
+      delay(1000);
+    }
     
-    read_soc();
-    if (no_animation_cnt + 1 >= ANIMATION_OCCURS) {
-      no_animation_cnt = 0;
-      if (soc <= 592) {
-        play_led_wave(0);
-      } else if (soc <= 810) {
-        play_led_wave(1);
-      } else {
-        play_led_wave(2);
-      }
-    } else {
-      no_animation_cnt += 1;
-      if (soc <= 592) {
-        blink_led_pretty(3);
-      } else if (soc <= 810) {
-        blink_led_pretty(2);
-      } else {
-        blink_led_pretty(1);
+    if (operation_mode > 0) {
+      read_soc();
+      if (operation_mode == 1) {
+          blink_led_pretty_according_to_soc();
+      } else if (operation_mode == 2) {
+        if (no_animation_cnt + 1 >= ANIMATION_OCCURS) {
+          no_animation_cnt = 0;
+          if (soc <= 592) {
+            play_led_wave(0);
+          } else if (soc <= 810) {
+            play_led_wave(1);
+          } else {
+            play_led_wave(2);
+          }
+        } else {
+          no_animation_cnt += 1;
+          blink_led_pretty_according_to_soc();
+        }
       }
     }
 
@@ -181,6 +192,17 @@ void play_led_wave(uint8_t mode = 0) {
     }
 }
 
+// BLINK LED PRETTY ACCORDING TO SOC
+void blink_led_pretty_according_to_soc() {
+  if (soc <= 592) {
+    blink_led_pretty(3);
+  } else if (soc <= 810) {
+    blink_led_pretty(2);
+  } else {
+    blink_led_pretty(1);
+  }
+}
+
 // SET ANALOG STATE OF ALL 3 LEDS
 void set_leds_analog(int led1, int led2, int led3) {
     analogWrite(PIN_LED1, led1);
@@ -201,7 +223,7 @@ void blink_led(uint8_t which_one) {
         which_one == 1 || which_one == 0,
         which_one == 2 || which_one == 0,
         which_one == 3 || which_one == 0);
-    delay(BLINK_ON_DURATION);
+    delay(BLINK_DELAY);
     set_leds_digital(LOW, LOW, LOW);
 }
 
