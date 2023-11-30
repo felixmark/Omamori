@@ -26,9 +26,9 @@
 #define SLEEP_SECONDS 15       // s
 #define ANIMATION_OCCURS 10    // play animation every nth time
 
-#define ADC_VALUE_BEFORE_BROWNOUT 1265 // ADC output @ 1.7V
-#define ADC_VALUE_1_3_CHARGED 2208     // ADC output @ 3.0V
-#define ADC_VALUE_2_3_CHARGED 3151     // ADC output @ 4.2V
+// 4.75V and above = 4095 while 1.8V is 1820
+#define ADC_VALUE_1_3_CHARGED 2720
+#define ADC_VALUE_2_3_CHARGED 3650
 
 // ==========================================================================================================================
 // Variables
@@ -114,16 +114,24 @@ void loop()
     }
     else
     {
-        // Turn on ADC and wait for 10 ms
-        ADC0_CTRLA |= ADC_ENABLE_bm;
-        delay(10);
-        
         // Check operating mode and blink accordingly
         if (operation_mode > 0)
         {
+            // Turn on ADC and wait for 10 ms
+            ADC0_CTRLA |= ADC_ENABLE_bm;
+            delay(10);
             read_soc();
             if (operation_mode == 1)
             {
+                /*
+                for (int i = 0; i < soc / 1000; ++i) { blink_led(0); delay(400); }
+                delay(1000); 
+                for (int i = 0; i < soc % 1000 / 100; ++i) { blink_led(1); delay(400); }
+                delay(1000);
+                for (int i = 0; i < soc % 100 / 10; ++i) { blink_led(2); delay(400); }
+                delay(1000);
+                for (int i = 0; i < soc % 10; ++i) { blink_led(3); delay(400); }
+                */
                 blink_led_pretty_according_to_soc();
             }
             else if (operation_mode == 2)
