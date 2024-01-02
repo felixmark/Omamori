@@ -25,8 +25,8 @@ A version History of the Omamori project.
 
 ## Version 0.3.1
 
-![PCB v3.1](./0.3/Images/photo_front.jpg)
-![PCB v3.1](./0.3/Images/photo_back.jpg)
+![PCB v3.1](./0.3/Images/Small_front_wooden.jpg)
+![PCB v3.1](./0.3/Images/Small_front_back.png)
 \
 Hardware as in Version 0.3.0 except that a few capacitors are closer to the BQ25570 and I added a few other transistors for stability. Everything is working as expected.  
 I consider this the final version for now.  

@@ -21,21 +21,21 @@
 #define PIN_LED3 PIN_A5                 // BOT LED
 
 #define NUM_SIGMOID_VALUES 105 // amount
-#define BLINK_DELAY 50         // ms
+#define BLINK_DELAY 100        // ms
 #define ANIMATION_DELAY 5      // ms
 #define SLEEP_SECONDS 15       // s
 #define ANIMATION_OCCURS 10    // play animation every nth time
 
-#define ADC_VALUE_BEFORE_BROWNOUT 1265 // ADC output @ 1.7V
-#define ADC_VALUE_1_3_CHARGED 2208     // ADC output @ 3.0V
-#define ADC_VALUE_2_3_CHARGED 3151     // ADC output @ 4.2V
+// 4.75V and above = 4095 while 1.8V is 1820
+#define ADC_VALUE_1_3_CHARGED 2720
+#define ADC_VALUE_2_3_CHARGED 3650
 
 // ==========================================================================================================================
 // Variables
 // ==========================================================================================================================
-int soc = 0;              // Store SOC measurement (State of charge)
-int no_animation_cnt = 0; // count wake-ups
-int operation_mode = 1;   // Track operation mode
+int soc = 0;                                    // Store SOC measurement (State of charge)
+int operation_mode = 1;                         // Track operation mode
+volatile bool button_pressed_interrupt = false; // Flag for button press ISR
 
 // ==========================================================================================================================
 // Constants
@@ -71,20 +71,28 @@ void setup()
         (&PORTC.PIN0CTRL)[pin] = PORT_ISC_INPUT_DISABLE_gc;         // Disable interrupt and digital input buffer on port C
     }
     pinMode(PIN_SUPERCAP_MEASUREMENT, INPUT);
-    pinMode(PIN_BUTTON, INPUT_PULLUP);
+    //pinMode(PIN_BUTTON, INPUT_PULLUP);
     pinMode(PIN_LED1, OUTPUT);
     pinMode(PIN_LED2, OUTPUT);
     pinMode(PIN_LED3, OUTPUT);
 
     // Wait for all register to be synchronized
-    while (RTC.STATUS > 0)
-        ;
+    while (RTC.STATUS > 0);
 
     // RTC configuration
     RTC.PER = 1024 * SLEEP_SECONDS;                                               // n secs between wakes.
     RTC.INTCTRL = 0 << RTC_CMP_bp | 1 << RTC_OVF_bp;                              // Overflow interrupt
     RTC.CTRLA = RTC_PRESCALER_DIV1_gc | 1 << RTC_RTCEN_bp | 1 << RTC_RUNSTDBY_bp; // No Prescaler + Enable RTC + Run in standby
     RTC.CLKSEL = RTC_CLKSEL_INT1K_gc;                                             // 32KHz divided by 32, i.e run at 1.024kHz
+
+    // Set ADC resolution
+    analogReference(VDD);
+    analogReadResolution(12);
+
+    // Set falling edge detection on button press
+    PORTA.PIN2CTRL = PORT_ISC_FALLING_gc;  // Enable pin A2 falling edge interrupts
+    PORTA.PIN2CTRL |= PORT_PULLUPEN_bm;     // Enable pin A2 pull-up resistor
+    PORTA.DIR &= ~PIN2_bm;               // Set pin A2 as INPUT  -> Internal pull-up required for async button interrupt
 
     // Enable interrupts
     sei();
@@ -95,32 +103,39 @@ void setup()
 // ==========================================================================================================================
 void loop()
 {
-    // Turn on ADC and wait for 10 ms
-    ADC0_CTRLA |= ADC_ENABLE_bm;
-    delay(10);
-
     // On button press change mode
-    if (analogRead(PIN_BUTTON) <= 10)
+    if (button_pressed_interrupt)
     {
+        button_pressed_interrupt = false;
         operation_mode = (operation_mode + 1) % 3;
         blink_led(operation_mode + 1);
-        delay(1000);
+        delay(200);
+        blink_led(operation_mode + 1);
     }
-
-    // Check operating mode and blink accordingly
-    if (operation_mode > 0)
+    else
     {
-        read_soc();
-        if (operation_mode == 1)
+        // Check operating mode and blink accordingly
+        if (operation_mode > 0)
         {
-
-            blink_led_pretty_according_to_soc();
-        }
-        else if (operation_mode == 2)
-        {
-            if (no_animation_cnt + 1 >= ANIMATION_OCCURS)
+            // Turn on ADC and wait for 10 ms
+            ADC0_CTRLA |= ADC_ENABLE_bm;
+            delay(10);
+            read_soc();
+            if (operation_mode == 1)
             {
-                no_animation_cnt = 0;
+                /*
+                for (int i = 0; i < soc / 1000; ++i) { blink_led(0); delay(400); }
+                delay(1000); 
+                for (int i = 0; i < soc % 1000 / 100; ++i) { blink_led(1); delay(400); }
+                delay(1000);
+                for (int i = 0; i < soc % 100 / 10; ++i) { blink_led(2); delay(400); }
+                delay(1000);
+                for (int i = 0; i < soc % 10; ++i) { blink_led(3); delay(400); }
+                */
+                blink_led_pretty_according_to_soc();
+            }
+            else if (operation_mode == 2)
+            {
                 if (soc <= ADC_VALUE_1_3_CHARGED)
                     play_led_wave(0);
                 else if (soc <= ADC_VALUE_2_3_CHARGED)
@@ -128,14 +143,9 @@ void loop()
                 else
                     play_led_wave(2);
             }
-            else
-            {
-                no_animation_cnt += 1;
-                blink_led_pretty_according_to_soc();
-            }
         }
     }
-
+    
     // Go to sleep
     ADC0_CTRLA &= ~ADC_ENABLE_bm;       // Turn off ADC
     set_sleep_mode(SLEEP_MODE_STANDBY); // Set standby sleep mode
@@ -148,7 +158,14 @@ void loop()
 // ==========================================================================================================================
 ISR(RTC_CNT_vect)
 {
-    RTC.INTFLAGS = RTC_OVF_bm;
+    RTC.INTFLAGS = RTC_OVF_bm;  // Wake up
+}
+
+ISR(PORTA_PORT_vect) {
+    if (PORTA.INTFLAGS & PIN2_bm) {
+        button_pressed_interrupt = true;
+        PORTA.INTFLAGS = PIN2_bm;  // Clear interrupt flag
+    }
 }
 
 // ==========================================================================================================================
@@ -200,16 +217,16 @@ void play_led_wave(uint8_t mode = 0)
             c = 0;
         }
         if (mode == 0)
-        { // Down
-            set_leds_analog(SIGMOID[a], SIGMOID[b], SIGMOID[c]);
-        }
-        else if (mode == 1)
         { // Up
             set_leds_analog(SIGMOID[c], SIGMOID[b], SIGMOID[a]);
         }
-        else
+        else if (mode == 1)
         { // Center
             set_leds_analog(SIGMOID[b], SIGMOID[a] + SIGMOID[c], SIGMOID[b]);
+        }
+        else
+        { // Down
+            set_leds_analog(SIGMOID[a], SIGMOID[b], SIGMOID[c]);
         }
         delay(ANIMATION_DELAY);
 
@@ -288,6 +305,10 @@ void blink_led_pretty(uint8_t which_one)
         else if (which_one == 3)
         {
             set_leds_analog(0, 0, SIGMOID[a]);
+        }
+        else if (which_one == 0)
+        {
+            set_leds_analog(SIGMOID[a], SIGMOID[a], SIGMOID[a]);
         }
         delay(ANIMATION_DELAY * 2);
     }
